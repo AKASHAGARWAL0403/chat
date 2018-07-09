@@ -1,0 +1,33 @@
+h1
+{
+    color: antiquewhite;
+}
+#chat-room
+{
+  height: 500px;
+  background-color: antiquewhite;
+  margin: 30px;
+  overflow: scroll;
+}
+#message {
+  width: 75%;
+  height: 30px;
+ border-radius: 30px;
+ margin-bottom: 5px;
+ padding: 15px;
+ font-size: 25px;
+
+}
+#handle
+{
+  width: 75%;
+  height: 30px;
+  border-radius: 30px;
+  padding: 15px;
+  font-size: 25px;
+
+  margin-bottom: 15px;
+
+}
+
+

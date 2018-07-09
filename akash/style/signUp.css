@@ -1,0 +1,80 @@
+
+html {
+  width: 100%;
+}
+
+body
+{
+  background-image: url('http://images.all-free-download.com/images/graphiclarge/clouds_in_sky_background_192377.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+#firstdiv {
+  margin: 0% 20% 0% 20% ;
+  text-align: center;
+  background-color: #bdc3c7;
+  border-radius: 5px;
+
+}
+#insidediv {
+  height: 480px;
+  padding-top: 70px;
+
+}
+.inpu {
+   width: 380px;
+  height: 40px;
+  border-radius: 7px;
+  padding: 5px;
+  font-size: 30px;
+  margin: 5px;
+}
+#heading
+{
+  padding-top: 80px;
+  color: black;
+  text-align: center;
+}
+#submit {
+  background-color: #0095ff;
+  padding-top: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  width: 400px;
+  height: 50px;
+  border-radius: 7px;
+  margin: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 30px;
+  overflow: hidden;
+  color: white;
+}
+footer {
+  font-size: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding-top: 15px;
+  padding-bottom: 15px;
+  color:  #bdc3c7;
+  opacity: .8;
+}
+a {
+  text-decoration: none;
+
+
+}
+a:hover {
+  font-size: 25px;
+}
+hr {
+
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: red;
+  background:  #bdc3c7;
+}
