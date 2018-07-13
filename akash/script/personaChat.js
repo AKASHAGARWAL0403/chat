@@ -51,6 +51,33 @@ $('button').on('click',function(){
 
 var socket  = io.connect("http://localhost:5000");
 
+var displayMessage = function(data){
+	output.innerHTML= "";
+	for(var i=0;i<data.length ;i++){
+		if(data[i].handle === username)
+			output.innerHTML += "<p class=mess1><strong>"+data[i].handle + ":</strong>  " +data[i].message+"</p>";
+		else
+			output.innerHTML += "<p class=mess2><strong>"+data[i].handle + ":</strong>  " +data[i].message+"</p>";
+	}
+}
+
+var restoreMessage = function(){
+	$.ajax({
+		type :'POST',
+		url: "http://127.0.0.1:5000/userDetails/restoreMessage",
+		data: {
+			tableName : sessionStorage.getItem("table")
+		},
+		success : function(data){
+			if(data.success){
+				displayMessage(data.result);
+			} else {
+
+			}
+		}
+	});
+}
+
 var checkTable = function(user1,user2){
 	$.ajax({
 		type: 'POST',
@@ -62,9 +89,54 @@ var checkTable = function(user1,user2){
 		success: function(data){
 			if(data.success){
 				sessionStorage.setItem("table" , data.tableName);
+				restoreMessage();
 				console.log(sessionStorage.getItem("table"));
 			} else{
 				window.location.href = "mainpage.html";
+			}
+		}
+	});
+}
+
+var storeMessage = function(message , data){
+	var tableName = sessionStorage.getItem("table");
+	$.ajax({
+		type : 'POST',
+		url :  "http://127.0.0.1:5000/userDetails/storePrivateMessage",
+		data : {
+			tableName : tableName , 
+			handle : username , 
+			message : message
+		},
+		success : function(response){
+			if(response.success) {
+				if(data.success){
+					if(data.sameUser){
+						socket.emit("chat" , {
+							message : message ,
+							handle : handle.value,
+							to : user2,
+							active : true
+						} , function(data){
+								alert(data);
+							}
+						);
+					} else{
+						socket.emit("chat" , {
+							message : message ,
+							handle : handle.value,
+							to : user2,
+							active : false
+						} , function(data){
+								alert(data);
+							}
+						);
+					}
+				} else{ 
+					alert(data.message);
+				}
+			} else {
+				alert("unablle to send message please try again");
 			}
 		}
 	});
@@ -94,32 +166,7 @@ chat_form.addEventListener('submit', function(e){
 		},
 		success : function(data){
 			console.log(data);
-			if(data.success){
-				if(data.sameUser){
-					socket.emit("chat" , {
-						message : message.value ,
-						handle : handle.value,
-						to : user2,
-						active : true
-					} , function(data){
-							alert(data);
-						}
-					);
-				} else{
-					socket.emit("chat" , {
-						message : message.value ,
-						handle : handle.value,
-						to : user2,
-						active : false
-					} , function(data){
-							alert(data);
-						}
-					);
-				}
-				
-			} else{ 
-				alert(data.message);
-			}
+			storeMessage(message.value , data);
 			feedback.innerHTML = "";
 			message.value = "";
 		}
@@ -127,7 +174,10 @@ chat_form.addEventListener('submit', function(e){
 });
 socket.on("personalChat" , function(data){
 	console.log(data);
-	output.innerHTML += "<p><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
+	if(data.handle === username)
+		output.innerHTML += "<p class=mess1><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
+	else
+		output.innerHTML += "<p class=mess2><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
 });
 socket.on("notify" , function(data){
 	alert("you have a new message");

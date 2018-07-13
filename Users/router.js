@@ -84,6 +84,20 @@ router.post("/createTable" ,bodyParser.urlencoded({ extended: false }), function
     var requestBody = req.body;
     controllersPersonal.createTable(requestBody , function(err ,result){
         res.send(result);
+    });
+});
+
+router.post("/restoreMessage",bodyParser.urlencoded({ extended: false }), function(req,res){
+    var requestBody = req.body;
+    controllersPersonal.restoreMessage(requestBody , function(err ,result){
+        res.send(result);
+    });
+}); 
+
+router.post("/storePrivateMessage" ,bodyParser.urlencoded({ extended: false }), function(req,res){
+    var requestBody = req.body;
+    controllersPersonal.storeMessage(requestBody , function(err ,result){
+        res.send(result);
     })
 })
 

@@ -80,7 +80,7 @@ exports.createTable = function(args , callback){
 				callback(null ,{success:false , message:err.message});
 		   else{
 				if(res.length === 0){
-					var query = "CREATE TABLE IF NOT EXISTS "+tablename1+" (id int AUTO_INCREMENT, handlle VARCHAR(50) , message VARCHAR(500) , PRIMARY KEY (id))";
+					var query = "CREATE TABLE IF NOT EXISTS "+tablename1+" (id int AUTO_INCREMENT, handle VARCHAR(50) , message VARCHAR(500) , PRIMARY KEY (id))";
 					db.get().query(query , function(err , result){
 						if(err)
 							callback(null ,{success:false , message:err.message});
@@ -95,5 +95,42 @@ exports.createTable = function(args , callback){
 		});
 	} else {
 		callback(null , {success : false , message: "MISSING PARAMS"});
+	}
+}
+
+exports.storeMessage = function(args , callback){
+	var tableName = args.tableName;
+	var handle = args.handle;
+	var message = args.message;
+	if(tableName && handle && message){
+		var query = "INSERT INTO "+tableName+" (handle , message) VALUES ?";
+		var value = [
+			[handle , message]
+		];
+		db.get().query(query , [value] , function(err,res){
+			if(err)
+				callback(null , {success : false , message : err.message});
+			else{
+				if(res.affectedRows === 1){
+					callback(null , {success:true , result:res});
+				}
+			}
+		});
+	} else{
+		callback(null , {success: false , message: "MISSING PARAMS"});
+	}
+}
+
+exports.restoreMessage = function(args , callback){
+	var tableName = args.tableName;
+	if(tableName){
+		var query = "SELECT * FROM "+tableName;
+		db.get().query(query , function(err ,res){
+			if(err){
+				callback(null , {success:false , message: err.message});
+			} else {
+				callback(null, {success: true , result : res});
+			}
+		});
 	}
 }
