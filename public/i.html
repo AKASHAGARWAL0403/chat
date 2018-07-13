@@ -155,8 +155,7 @@ var feedback = document.getElementById('feedback');
 var handle = document.getElementById('handle');
 var a=0;
  button.addEventListener('click' , function(){
-
-    socket.emit('delete', {name : talkingto} );
+	socket.emit('delete', {name : talkingto} );
  })
 
  message.addEventListener('keypress' , function(){
@@ -169,10 +168,10 @@ var a=0;
 
    socket.emit('mssg_send' , {"name":name , "message" : message.value});
  });
- window.addEventListener('load' , function()
-{
-  socket.emit('closing_time' ,{});
-});
+//  window.addEventListener('load' , function()
+// {
+//   socket.emit('closing_time' ,{});
+// });
 
 socket.on('mssg_emmited' , function(data)
 {

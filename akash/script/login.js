@@ -12,7 +12,8 @@ $('#form').submit(function(e){
         success: function(data){
             if(data.success){
 			   console.log("fuck");
-			   sessionStorage.setItem("userId" , data.result[0].id);
+               sessionStorage.setItem("userId" , data.result[0].id);
+               sessionStorage.setItem("username" , data.result[0].username)
 			   window.location.href = "mainpage.html"
             }
                 else{

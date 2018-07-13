@@ -9,21 +9,8 @@ var handle = document.getElementById("handle");
 var send =document.getElementById("send");
 var output = document.getElementById("output");
 var feedback = document.getElementById("feedback");
-var online = document.getElementById("online");
 var chat_hide = document.getElementById('chat_hide');
 var chat_form = document.getElementById('chat_form');
-var getOnline = function(data){
-	online.innerHTML = "";
-	for(var i=0;i< data.length  ; i++)
-	{
-		console.log(data[i]);
-		if(data[i].userName != username)
-	 	online.innerHTML += "<p>" +  data[i].userName + "  is online </p>"+"<button id=submit onclick=Gopersonal('"+username+"','"+data[i].userName+"') >chat</button>"+"<div id="+data[i].userName+" style=display:none></div>";
-		else
-		online.innerHTML += "<p>" + data[i].userName + "  is online</p> ";
-	}
-	console.log(data);
-}
 
 var apiCalls = function(){
 	$.ajax({
@@ -35,17 +22,8 @@ var apiCalls = function(){
 		},
 		success: function(data){
 			if(data.success){
-				$.ajax({
-				   type:'GET',
-				   url: "http://127.0.0.1:5000/userDetails/getUser",
-				   success: function(data){
-						if(data.success){
-							getOnline(data.result);
-						} else {
-							console.log(data);
-						}
-				   }
-			   })
+                console.log(data);
+                console.log(username);
 			}
 			else{
 				console.log(data);
@@ -54,34 +32,17 @@ var apiCalls = function(){
 		}
 	});
 }
-var Gopersonal  = function(user1 , user2){
-	console.log(user1);
-	console.log(user2);
-	console.log(sessionStorage.getItem("socket"));
-	$.ajax({
-		type:'POST',
-		url:"http://127.0.0.1:5000/userDetails/Gopersonal",
-		data: {
-			user1: user1,
-			user2: user2
-		},
-		success: function(data){
-			if(data.success){
-				window.location.href = "personalChat.html";
-			}else{
-				console.log(data);
-			}
-		}
-	})
-};
+
 var socket  = io.connect("http://localhost:5000");
 
 socket.on('connect', function(){
-	sessionStorage.setItem("socket", socket.id);
+    sessionStorage.setItem("socket", socket.id);
+    console.log(socket.id);
+    console.log("dfgxc");
 	apiCalls();
 });
 
-socket.on('disco' , function(){
+socket.on('alterActiveUser' , function(){
 	console.log("entered");
 	apiCalls();
 })

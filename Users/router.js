@@ -3,22 +3,48 @@ var app = express();
 var router = express.Router();
 var path = require("./../paths");
 var bodyParser = require('body-parser');
-var controllers = require("./controllers");
+var controllersLogin = require("./controllersLogin");
+var controllersLogged = require('./controllerLogged');
+var controllersPersonal = require('./controllersPersonal');
 
 router.post("/login" , bodyParser.urlencoded({ extended: false }), function(req,res){
     var requestBody = req.body;
-    controllers.findUser(requestBody , function(err,result){
+    controllersLogin.findUser(requestBody , function(err,result){
         if(err){
             console.log(err);
         } else {
             res.send(result);
         }
+    });
+})
+
+router.post("/loggedIn" , bodyParser.urlencoded({ extended: false }), function(req,res){
+    var requestBody = req.body;
+    controllersLogged.loginUser(requestBody , function(err,result){
+        if(err){
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+    });
+})
+
+router.get("/getUser" , function(req,res){
+    controllersLogged.getUser(function(err,result){
+        res.send(result);
+    });
+})
+
+router.post("/Gopersonal" , bodyParser.urlencoded({ extended: false }), function(req,res){
+    var requestBody = req.body;
+    controllersPersonal.insertChat(requestBody , function(err,result){
+        res.send(result);
     });
 })
 
 router.post("/signup" ,bodyParser.urlencoded({ extended: false }), function(req,res){
     var requestBody = req.body;
-    controllers.create(requestBody , function(err,result){
+    controllersLogin.create(requestBody , function(err,result){
         if(err){
             console.log(err);
         } else {
@@ -26,5 +52,8 @@ router.post("/signup" ,bodyParser.urlencoded({ extended: false }), function(req,
         }
     });
 })
+
+
+
 
 module.exports = router;
