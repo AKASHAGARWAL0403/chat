@@ -144,11 +144,9 @@ socket.on("chat" , function(data) {
 	output.innerHTML += "<p><strong>" + data.handle + "</strong> : " + data.message + "</p><hr>" ;
 });
 
-socket.on("whisper" , function(data)
-{
-	feedback.innerHTML = "";
-	output.innerHTML += "<p><strong>" + data.handle + "</strong> : " + data.message + "</p><hr>" ;
-});
+socket.on("audio" , function(){
+	document.getElementById("audio").play();
+})
 
 socket.on("mssg_emmited" , function(data)
 {

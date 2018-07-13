@@ -59,7 +59,7 @@ io.on('connection' , function(socket)
 	socket.on("chat" , function(data,callback) {
 		console.log("logged into chat");
 		io.sockets.emit("chat" ,data);
-	
+		socket.broadcast.emit("audio");
 	});
 
 	socket.on("typing" , function(data){

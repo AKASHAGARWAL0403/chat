@@ -46,6 +46,10 @@ socket.on('connect', function(){
 	apiCalls();
 });
 
+socket.on("audio" , function(){
+	document.getElementById("audio").play();
+})
+
 socket.on('alterActiveUser' , function(){
 	console.log("entered");
 	apiCalls();
@@ -88,12 +92,12 @@ for(var i=0;i< data.length  ; i++)
 
 //FOR SE
 
-socket.on("chat" , function(data) {
+// socket.on("chat" , function(data) {
 
-	console.log("logged to chat");
-	feedback.innerHTML = "";
-	output.innerHTML += "<p><strong>" + data.handle + "</strong> : " + data.message + "</p><hr>" ;
-});
+// 	console.log("logged to chat");
+// 	feedback.innerHTML = "";
+// 	output.innerHTML += "<p><strong>" + data.handle + "</strong> : " + data.message + "</p><hr>" ;
+// });
 
 socket.on("whisper" , function(data)
 {
@@ -115,7 +119,7 @@ message.addEventListener('keypress' , function(){
 	socket.emit("typing" , handle.value);
 });
 
-socket.on("typing" , function(data){
-	feedback.innerHTML = data + " : is typing";
-});
+// socket.on("typing" , function(data){
+// 	feedback.innerHTML = data + " : is typing";
+// });
 }
