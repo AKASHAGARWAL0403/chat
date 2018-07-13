@@ -38,7 +38,11 @@ io.on('connection' , function(socket)
 	client_socket.push(socket);
 	socket.broadcast.emit('disco');
 	
-	
+	socket.on("username" , function(data){
+		socket.username = data.username;
+		console.log(socket.username);
+	});
+
 	socket.on("disconnect" , function(){
 		var socketId = socket.id;
 		console.log(socketId);
@@ -58,8 +62,28 @@ io.on('connection' , function(socket)
 
 	socket.on("chat" , function(data,callback) {
 		console.log("logged into chat");
-		io.sockets.emit("chat" ,data);
-		socket.broadcast.emit("audio");
+		if(!data.to){
+			io.sockets.emit("chat" ,data);
+			socket.broadcast.emit("audio");
+		} else {
+			console.log(data);
+			var to = data.to;
+			var targetSocket = "";
+			for(var i=0;i<client_socket.length ; i++){
+				if(client_socket[i].username === to){
+					targetSocket = client_socket[i];
+					break;
+				}
+			}
+			if(data.active){
+				console.log("active");
+				targetSocket.emit("personalChat" , data);
+			} else {
+				console.log("not active");
+				targetSocket.emit("notify" , data);
+			}
+			socket.emit("personalChat" , data);
+		}
 	});
 
 	socket.on("typing" , function(data){

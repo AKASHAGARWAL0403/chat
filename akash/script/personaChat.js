@@ -1,9 +1,10 @@
-if(sessionStorage.getItem("userId") === null || sessionStorage.getItem("username") === null)
+if(sessionStorage.getItem("userId") === null || sessionStorage.getItem("username") === null || sessionStorage.getItem("user2") === null)
 {
 	window.location.href = "/";
 }
 else{
-var username = sessionStorage.getItem("username")
+var username = sessionStorage.getItem("username");
+var user2 = sessionStorage.getItem("user2");
 var message = document.getElementById("message");
 var handle = document.getElementById("handle");
 var send =document.getElementById("send");
@@ -22,104 +23,120 @@ var apiCalls = function(){
 		},
 		success: function(data){
 			if(data.success){
-                console.log(data);
-                console.log(username);
+				checkTable(username , user2);
 			}
 			else{
 				console.log(data);
-				window.location.href = "/";
+				window.location.href = "mainpage.html";
 			}
 		}
 	});
 }
 $('button').on('click',function(){
-    console.log("mafda");
-    window.location.href = "mainpage.html";
-})
+	$.ajax({
+		type: 'POST',
+		url: "http://127.0.0.1:5000/userDetails/removePersonalChat",
+		data: {
+			username : username
+		},
+		success: function(data){
+			if(data.success){
+				window.location.href = "mainpage.html";
+			} else{ 
+				alert(data.message);			
+			}
+		}
+	});
+});
 
 var socket  = io.connect("http://localhost:5000");
 
+var checkTable = function(user1,user2){
+	$.ajax({
+		type: 'POST',
+		url: "http://127.0.0.1:5000/userDetails/createTable",
+		data: {
+			user1: user1,
+			user2: user2
+		},
+		success: function(data){
+			if(data.success){
+				sessionStorage.setItem("table" , data.tableName);
+				console.log(sessionStorage.getItem("table"));
+			} else{
+				window.location.href = "mainpage.html";
+			}
+		}
+	});
+}
+
 socket.on('connect', function(){
-    sessionStorage.setItem("socket", socket.id);
-    console.log(socket.id);
-    console.log("dfgxc");
+	sessionStorage.setItem("socket", socket.id);
+	handle.value = username;
+	console.log(socket.id);
 	apiCalls();
+	socket.emit("username" , {username : username});
 });
 
 socket.on("audio" , function(){
 	document.getElementById("audio").play();
-})
-
-socket.on('alterActiveUser' , function(){
-	console.log("entered");
-	apiCalls();
-})
-var user_arr = [];
-
-
+});
 
 chat_form.addEventListener('submit', function(e){
-
 	e.preventDefault();
-	console.log("logged into button click");
-	socket.emit("chat" , {
-		message : message.value ,
-		handle : handle.value
-	} ,function(data){
-			alert(data);
+	console.log("logged into button click private");
+	$.ajax({
+		type: 'POST',
+		url: "http://127.0.0.1:5000/userDetails/getUserData",
+		data : {
+			user1 : username,
+			user2 : user2
+		},
+		success : function(data){
+			console.log(data);
+			if(data.success){
+				if(data.sameUser){
+					socket.emit("chat" , {
+						message : message.value ,
+						handle : handle.value,
+						to : user2,
+						active : true
+					} , function(data){
+							alert(data);
+						}
+					);
+				} else{
+					socket.emit("chat" , {
+						message : message.value ,
+						handle : handle.value,
+						to : user2,
+						active : false
+					} , function(data){
+							alert(data);
+						}
+					);
+				}
+				
+			} else{ 
+				alert(data.message);
+			}
+			feedback.innerHTML = "";
+			message.value = "";
+		}
 	});
-	feedback.innerHTML = "";
-	message.value = "";
 });
-
-
-
-socket.on("nickna" , function(data , client) {
-//  online.innerHTML += "<p>" + data + " is online </p>";
- //  user_arr.push(data);
-	var user_name = data[client.indexOf(socket.id)];
-	online.innerHTML = "";
-for(var i=0;i< data.length  ; i++)
-{
-	 if(client[i] != socket.id)
-	 online.innerHTML += "<p>" +  data[i] + "  is online  <form id="+client[i]+" action=/chat/"+client[i]+" method=POST> <input type=text value="+user_name+" name=name style=display:none > <input  type=submit value=chat  ></form></p>"+"<div id="+data[i]+" style=display:none></div>";
-		 else
-			online.innerHTML += "<p>" + data[i] + "  is online</p> ";
-
-
-}
+socket.on("personalChat" , function(data){
+	console.log(data);
+	output.innerHTML += "<p><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
 });
-
-//FOR SE
-
-// socket.on("chat" , function(data) {
-
-// 	console.log("logged to chat");
-// 	feedback.innerHTML = "";
-// 	output.innerHTML += "<p><strong>" + data.handle + "</strong> : " + data.message + "</p><hr>" ;
-// });
-
-socket.on("whisper" , function(data)
-{
-	feedback.innerHTML = "";
-	output.innerHTML += "<p><strong>" + data.handle + "</strong> : " + data.message + "</p><hr>" ;
+socket.on("notify" , function(data){
+	alert("you have a new message");
 });
-
-socket.on("mssg_emmited" , function(data)
-{
-		 document.getElementById(data.name).style.display = "block";
-	//   document.getElementById(data.name).form.style.display = "block";
-	document.getElementById(data.name).innerHTML += "new message";
-//  alert("eesrx");
-});
-// FOR TYPING
-
 message.addEventListener('keypress' , function(){
-
 	socket.emit("typing" , handle.value);
 });
 
 // socket.on("typing" , function(data){
-// 	feedback.innerHTML = data + " : is typing";
+	//feedback.innerHTML = data + " : is typing";
 // });
 }

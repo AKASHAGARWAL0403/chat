@@ -22,7 +22,6 @@ var getOnline = function(data){
 		else
 		online.innerHTML += "<p>" + data[i].userName + "  is online</p> ";
 	}
-	console.log(data);
 }
 
 var getMessages = function(data){
@@ -30,7 +29,6 @@ var getMessages = function(data){
 	for(var i=0;i< data.length  ; i++){
 		output.innerHTML += "<p><strong>" + data[i].handle + "</strong> : " + data[i].messge + "</p><hr>" ;
 	}
-	console.log(data);
 }
 
 var apiCalls = function(){
@@ -74,9 +72,9 @@ var apiCalls = function(){
 	});
 }
 var Gopersonal  = function(user1 , user2){
+	sessionStorage.setItem("user2" , user2);
 	console.log(user1);
 	console.log(user2);
-	console.log(sessionStorage.getItem("socket"));
 	$.ajax({
 		type:'POST',
 		url:"http://127.0.0.1:5000/userDetails/Gopersonal",
@@ -99,6 +97,7 @@ socket.on('connect', function(){
 	sessionStorage.setItem("socket", socket.id);
 	handle.value = username;
 	apiCalls();
+	socket.emit("username" , {username : username});
 });
 
 socket.on('disco' , function(){
@@ -146,8 +145,11 @@ socket.on("chat" , function(data) {
 
 socket.on("audio" , function(){
 	document.getElementById("audio").play();
-})
+});
 
+socket.on("notify" , function(data){
+	alert("you have a new message");
+});
 socket.on("mssg_emmited" , function(data)
 {
 		 document.getElementById(data.name).style.display = "block";

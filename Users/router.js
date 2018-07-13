@@ -42,6 +42,20 @@ router.post("/Gopersonal" , bodyParser.urlencoded({ extended: false }), function
     });
 });
 
+router.post("/removePersonalChat" , bodyParser.urlencoded({ extended: false }), function(req,res){
+    var requestBody = req.body;
+    controllersPersonal.removeUser(requestBody , function(err,result){
+        res.send(result);
+    });
+});
+
+router.post("/getUserData" , bodyParser.urlencoded({ extended: false }), function(req,res){
+    var requestBody = req.body;
+    controllersPersonal.getUser(requestBody , function(err,result){
+        res.send(result);
+    });
+});
+
 router.post("/signup" ,bodyParser.urlencoded({ extended: false }), function(req,res){
     var requestBody = req.body;
     controllersLogin.create(requestBody , function(err,result){
@@ -62,6 +76,13 @@ router.post("/storeMessage" ,bodyParser.urlencoded({ extended: false }), functio
 
 router.get("/getGroupMessages" , function(req,res){
     controllersMessage.getMessages(function(err ,result){
+        res.send(result);
+    })
+})
+
+router.post("/createTable" ,bodyParser.urlencoded({ extended: false }), function(req,res){
+    var requestBody = req.body;
+    controllersPersonal.createTable(requestBody , function(err ,result){
         res.send(result);
     })
 })
