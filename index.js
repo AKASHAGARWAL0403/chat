@@ -57,10 +57,7 @@ io.on('connection' , function(socket)
 	});
 
 	socket.on("chat" , function(data,callback) {
-		console.log("logged into chat in seerver");
-	
-		
-		console.log("logged in else");
+		console.log("logged into chat");
 		io.sockets.emit("chat" ,data);
 	
 	});

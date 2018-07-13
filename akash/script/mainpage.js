@@ -25,6 +25,14 @@ var getOnline = function(data){
 	console.log(data);
 }
 
+var getMessages = function(data){
+	output.innerHTML = "";
+	for(var i=0;i< data.length  ; i++){
+		output.innerHTML += "<p><strong>" + data[i].handle + "</strong> : " + data[i].messge + "</p><hr>" ;
+	}
+	console.log(data);
+}
+
 var apiCalls = function(){
 	$.ajax({
 		type: 'POST',
@@ -41,6 +49,17 @@ var apiCalls = function(){
 				   success: function(data){
 						if(data.success){
 							getOnline(data.result);
+							$.ajax({
+								type: 'GET',
+								url: "http://127.0.0.1:5000/userDetails/getGroupMessages",
+								success: function(data){
+									if(data.success){
+										getMessages(data.result);
+									} else {
+										console.log(data.message);
+									}
+								}
+							});
 						} else {
 							console.log(data);
 						}
@@ -78,6 +97,7 @@ var socket  = io.connect("http://localhost:5000");
 
 socket.on('connect', function(){
 	sessionStorage.setItem("socket", socket.id);
+	handle.value = username;
 	apiCalls();
 });
 
@@ -90,38 +110,32 @@ var user_arr = [];
 
 
 chat_form.addEventListener('submit', function(e){
-
 	e.preventDefault();
 	console.log("logged into button click");
-	socket.emit("chat" , {
-		message : message.value ,
-		handle : handle.value
-	} ,function(data){
-			alert(data);
+	$.ajax({
+		type: 'POST',
+		url: "http://127.0.0.1:5000/userDetails/storeMessage",
+		data: {
+			message : message.value,
+			handle : handle.value
+		},
+		success: function(data){
+			if(data.success){
+				socket.emit("chat" , {
+					message : message.value ,
+					handle : handle.value
+				} ,function(data){
+						alert(data);
+				});
+				feedback.innerHTML = "";
+				message.value = "";
+			}
+			else{
+				alert(data.message);
+			}
+		}
 	});
-	feedback.innerHTML = "";
-	message.value = "";
 });
-
-
-
-socket.on("nickna" , function(data , client) {
-//  online.innerHTML += "<p>" + data + " is online </p>";
- //  user_arr.push(data);
-	var user_name = data[client.indexOf(socket.id)];
-	online.innerHTML = "";
-for(var i=0;i< data.length  ; i++)
-{
-	 if(client[i] != socket.id)
-	 online.innerHTML += "<p>" +  data[i] + "  is online  <form id="+client[i]+" action=/chat/"+client[i]+" method=POST> <input type=text value="+user_name+" name=name style=display:none > <input  type=submit value=chat  ></form></p>"+"<div id="+data[i]+" style=display:none></div>";
-		 else
-			online.innerHTML += "<p>" + data[i] + "  is online</p> ";
-
-
-}
-});
-
-//FOR SE
 
 socket.on("chat" , function(data) {
 

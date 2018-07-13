@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var controllersLogin = require("./controllersLogin");
 var controllersLogged = require('./controllerLogged');
 var controllersPersonal = require('./controllersPersonal');
-
+var controllersMessage  = require('./controllersMessage');
 router.post("/login" , bodyParser.urlencoded({ extended: false }), function(req,res){
     var requestBody = req.body;
     controllersLogin.findUser(requestBody , function(err,result){
@@ -40,7 +40,7 @@ router.post("/Gopersonal" , bodyParser.urlencoded({ extended: false }), function
     controllersPersonal.insertChat(requestBody , function(err,result){
         res.send(result);
     });
-})
+});
 
 router.post("/signup" ,bodyParser.urlencoded({ extended: false }), function(req,res){
     var requestBody = req.body;
@@ -51,9 +51,20 @@ router.post("/signup" ,bodyParser.urlencoded({ extended: false }), function(req,
             res.send(result);
         }
     });
+});
+
+router.post("/storeMessage" ,bodyParser.urlencoded({ extended: false }), function(req,res){
+    var requestBody = req.body;
+    controllersMessage.storeMessage(requestBody , function(err ,result){
+        res.send(result);
+    })
+});
+
+router.get("/getGroupMessages" , function(req,res){
+    controllersMessage.getMessages(function(err ,result){
+        res.send(result);
+    })
 })
-
-
 
 
 module.exports = router;
