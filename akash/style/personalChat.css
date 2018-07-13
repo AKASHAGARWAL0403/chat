@@ -1,0 +1,77 @@
+
+html{
+  height: 100%
+}
+ body {
+   background-image: url('https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_1280.jpg');
+   background-repeat: no-repeat;
+   background-size: cover;
+ }
+   h1
+   {
+       color: antiquewhite;
+   }
+   #chat_form{
+
+   }
+   #chat_hide
+   {
+
+   }
+   #chat-room
+   {
+     height: 500px;
+     overflow: auto;
+     margin: 30px;
+
+   }
+   #message {
+     width: 75%;
+     height: 50px;
+    border-radius: 30px;
+    margin-bottom: 5px;
+    padding: 15px;
+    font-size: 25px;
+
+   }
+   #handle
+   {
+     width: 75%;
+     height: 50px;
+     border-radius: 30px;
+     padding: 15px;
+     font-size: 25px;
+
+     margin-bottom: 15px;
+
+   }
+   .mess1
+   {
+     background-color: #4080ff;
+   border-radius: 30px;
+
+   padding: 10px;
+   font-size: 20px;
+
+   max-width: 50%;
+   box-sizing: content-box;
+   min-width: 20%;
+   display: table;
+   float :right;
+   clear: both;
+   color :white;
+   }
+ .mess2 {
+   background-color:#e9ebee;
+ border-radius: 30px;
+
+ padding: 10px;
+ font-size: 20px;
+
+ max-width: 75%;
+ box-sizing: content-box;
+
+ display: table;
+ float: left;
+ clear: both;
+ }

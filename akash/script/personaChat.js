@@ -32,6 +32,10 @@ var apiCalls = function(){
 		}
 	});
 }
+$('button').on('click',function(){
+    console.log("mafda");
+    window.location.href = "mainpage.html";
+})
 
 var socket  = io.connect("http://localhost:5000");
 
