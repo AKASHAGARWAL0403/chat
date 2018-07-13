@@ -148,7 +148,8 @@ socket.on("audio" , function(){
 });
 
 socket.on("notify" , function(data){
-	alert("you have a new message");
+	alert("you have a new message from "+data.handle);
+	document.getElementById("audio").play();
 });
 socket.on("mssg_emmited" , function(data)
 {

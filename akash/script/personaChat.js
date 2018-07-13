@@ -180,7 +180,8 @@ socket.on("personalChat" , function(data){
 		output.innerHTML += "<p class=mess2><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
 });
 socket.on("notify" , function(data){
-	alert("you have a new message");
+	alert("you have a new message from "+data.handle);
+	document.getElementById("audio").play();
 });
 message.addEventListener('keypress' , function(){
 	socket.emit("typing" , handle.value);

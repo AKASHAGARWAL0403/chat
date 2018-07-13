@@ -69,20 +69,26 @@ io.on('connection' , function(socket)
 			console.log(data);
 			var to = data.to;
 			var targetSocket = "";
-			for(var i=0;i<client_socket.length ; i++){
+			var i;
+			for(i=0;i<client_socket.length ; i++){
 				if(client_socket[i].username === to){
 					targetSocket = client_socket[i];
 					break;
 				}
 			}
-			if(data.active){
-				console.log("active");
-				targetSocket.emit("personalChat" , data);
+			if(i != client_socket.length){
+				if(data.active){
+					console.log("active");
+					targetSocket.emit("personalChat" , data);
+				} else {
+					console.log("not active");
+					targetSocket.emit("notify" , data);
+				}
+				socket.emit("personalChat" , data);
 			} else {
-				console.log("not active");
-				targetSocket.emit("notify" , data);
+				socket.emit("personalChat" , data);
 			}
-			socket.emit("personalChat" , data);
+			
 		}
 	});
 
@@ -90,55 +96,4 @@ io.on('connection' , function(socket)
 		socket.broadcast.emit("typing" , data);
 	});
 
-// 	socket.on("mssg_send" , function(data)
-// {
-// 	console.log("babababaa0");
-// //  if(socket == linking[linking[client_name[client_socket.indexOf(socket)]].nickname])\
-// if(linking[linking[client_name[client_socket.indexOf(socket)]].nickname] == undefined  || linking[linking[client_name[client_socket.indexOf(socket)]].nickname].nickname == socket.nickname)
-// {
-// 	console.log("here");
-// 	//  console.log(linking[linking[client_name[client_socket.indexOf(socket)]].nickname].nickname);
-// 	if( linking[linking[client_name[client_socket.indexOf(socket)]].nickname] == undefined )
-// linking_message[linking[client_name[client_socket.indexOf(socket)]].nickname]  = {name : socket.nickname , message : data.message};
-// linking[client_name[client_socket.indexOf(socket)]].emit("mssg_emmited" , data);
-// socket.emit('mssg_emmited',data);
-// }
-// else
-// {
-// //  linking_message[socket.nickname] = data.message;
-// 	linking_message[linking[client_name[client_socket.indexOf(socket)]].nickname]  = {name : socket.nickname , message : data.message};
-// 	linking[client_name[client_socket.indexOf(socket)]].emit("alert_him" , data);
-// }
-
-// });
-
-// socket.on('closing_time' , function(data)
-// {
-// 	if(linking_message[socket.nickname] == undefined)
-// 	socket.emit('take_name' , { name :client_name[client_arr.indexOf(socket.id)] , message : ""});
-// 	else {
-// 		if(linking[client_name[client_socket.indexOf(socket)]].nickname == linking_message[client_name[client_socket.indexOf(socket)]].name)
-// 		socket.emit('take_name' , { name :client_name[client_arr.indexOf(socket.id)] , message : linking_message[socket.nickname]});
-// 		else {
-// 			socket.emit('take_name' , { name :client_name[client_arr.indexOf(socket.id)] , message : ""});
-// 		}
-// 	}
-// });
-
 });
-
-
-
-app.post("/chat/:id" , bodyParser.urlencoded({ extended: false }) , function(req,res)
-{
-	//name  = req.body.name;
-	soc = req.params.id;
-
-	name = req.body.name;
-	linking[name] = client_socket[client_arr.indexOf(soc)];
-	console.log(soc);
-	console.log(linking[name].nickname + "   aaa toh raha h ");
-	console.log(client_name.indexOf(name)+ "  fvcxgvdzxvcdfvccxvadfcbvdfcgv");
-	client_name.push(name);
-	res.sendFile(__dirname + "/public/i.html");
-} );
