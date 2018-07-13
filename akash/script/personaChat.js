@@ -12,7 +12,7 @@ var output = document.getElementById("output");
 var feedback = document.getElementById("feedback");
 var chat_hide = document.getElementById('chat_hide');
 var chat_form = document.getElementById('chat_form');
-
+var chat_room = document.getElementById('chat-room');
 var apiCalls = function(){
 	$.ajax({
 		type: 'POST',
@@ -32,7 +32,7 @@ var apiCalls = function(){
 		}
 	});
 }
-$('button').on('click',function(){
+$('#button').on('click',function(){
 	$.ajax({
 		type: 'POST',
 		url: "http://127.0.0.1:5000/userDetails/removePersonalChat",
@@ -59,6 +59,7 @@ var displayMessage = function(data){
 		else
 			output.innerHTML += "<p class=mess2><strong>"+data[i].handle + ":</strong>  " +data[i].message+"</p>";
 	}
+	chat_room.scrollTop = chat_room.scrollHeight;
 }
 
 var restoreMessage = function(){
@@ -178,6 +179,7 @@ socket.on("personalChat" , function(data){
 		output.innerHTML += "<p class=mess1><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
 	else
 		output.innerHTML += "<p class=mess2><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
+	chat_room.scrollTop = chat_room.scrollHeight;
 });
 socket.on("notify" , function(data){
 	alert("you have a new message from "+data.handle);

@@ -12,15 +12,16 @@ var feedback = document.getElementById("feedback");
 var online = document.getElementById("online");
 var chat_hide = document.getElementById('chat_hide');
 var chat_form = document.getElementById('chat_form');
+var chat_room = document.getElementById('chat-room');
+
+console.log(chat_room.scrollHeight);
 var getOnline = function(data){
 	online.innerHTML = "";
 	for(var i=0;i< data.length  ; i++)
 	{
 		console.log(data[i]);
 		if(data[i].userName != username)
-	 	online.innerHTML += "<p>" +  data[i].userName + "  is online </p>"+"<button id=submit onclick=Gopersonal('"+username+"','"+data[i].userName+"') >chat</button>"+"<div id="+data[i].userName+" value=0 ></div>";
-		else
-		online.innerHTML += "<p>" + data[i].userName + "  is online</p> ";
+	 	online.innerHTML += "<div class=people><span class=sign></span><h4 class=onlineUser >" +  data[i].userName + "  is online </h4>"+"<button id=submit class='btn btn-default' onclick=Gopersonal('"+username+"','"+data[i].userName+"') >chat</button>"+"<div id="+data[i].userName+" value=0 ></div></div>";
 	}
 }
 
@@ -29,6 +30,7 @@ var getMessages = function(data){
 	for(var i=0;i< data.length  ; i++){
 		output.innerHTML += "<p><strong>" + data[i].handle + "</strong> : " + data[i].messge + "</p><hr>" ;
 	}
+	chat_room.scrollTop = chat_room.scrollHeight;
 }
 
 var apiCalls = function(){

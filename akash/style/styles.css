@@ -7,7 +7,7 @@ h1
   height: 500px;
   background-color: antiquewhite;
   margin: 30px;
-  overflow: scroll;
+  overflow: overlay;
 }
 #message {
   width: 75%;
@@ -27,7 +27,23 @@ h1
   font-size: 25px;
 
   margin-bottom: 15px;
-
 }
-
-
+#online {
+  padding-top: 100px;
+  overflow: overlay;
+}
+.people{
+  margin: 10px;
+  padding: 10px;
+}
+.onlineUser {
+  display: inline;
+  margin: 10px
+}
+.sign{
+  background: #008000;
+  height: 9px;
+  width: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
