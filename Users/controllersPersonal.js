@@ -1,26 +1,63 @@
 var db = require("./../Databse/chat_db");
 
+var hasDuplicate = function(args , callback){
+	if(args){
+		var query = "SELECT * FROM personalchat WHERE user1='"+args+"'";
+		db.get().query(query , function(err,res){
+			if(err){
+				callback(new Error(err.message));
+			} else {
+				if(res.length != 0) {
+					callback(null , {success : true , userPresent : true});
+				} else {
+					callback(null , {success: true , userPresent : false});
+				}
+			}
+		});
+	}
+}
+
 exports.insertChat = function(args , callback){
 	var user1 = args.user1;
 	var user2 = args.user2;
 	if(user1 && user2){
-		var query = "INSERT INTO personalchat (user1 , user2) VALUES ?";
-		var value = [
-			[user1,user2]
-		]
-		db.get().query(query , [value] , function(err, res){
+		hasDuplicate(user1, function(err,res){
 			if(err){
 				callback(null , {success:false , message: err.message});
-			}
-			else{
-				if(res.affectedRows === 1){
-					callback(null,{success:true});
+			} else{
+				if(res.userPresent){
+					var query = "UPDATE personalchat SET user2='"+user2+"' WHERE user1='"+user1+"'";
+					db.get().query(query , function(err,res){
+						if(err){
+							callback(null , {success:false , message: err.message});
+						} else {
+							if(res.affectedRows === 1){
+								callback(null,{success:true});
+							}
+						}
+					});
+				} else {
+					var query = "INSERT INTO personalchat (user1 , user2) VALUES ?";
+					var value = [
+						[user1,user2]
+					];
+					db.get().query(query , [value] , function(err, res){
+						if(err){
+							callback(null , {success:false , message: err.message});
+						}
+						else{
+							if(res.affectedRows === 1){
+								callback(null,{success:true});
+							}
+							else{
+								callback(null,{success:false , message:"MULTIPLE ENTRY DONE"});
+							}
+						}
+					});
 				}
-				else{
-					callback(null,{success:false , message:"MULTIPLE ENTRY DONE"});
-				}
 			}
-		});
+		})
+		
 	}
 }
 

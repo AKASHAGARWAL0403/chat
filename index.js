@@ -29,8 +29,7 @@ console.log(path.join(__dirname,'akash'));
 
 app.use( "/frontpage" , express.static('akash'));
 app.use("/userDetails" , UserRouter);
-//app.use(express.static('public'));
-//app.use("/contact" ,express.static('public'));
+
 var client_socket = [];
 io.on('connection' , function(socket)
 {

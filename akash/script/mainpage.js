@@ -18,7 +18,7 @@ var getOnline = function(data){
 	{
 		console.log(data[i]);
 		if(data[i].userName != username)
-	 	online.innerHTML += "<p>" +  data[i].userName + "  is online </p>"+"<button id=submit onclick=Gopersonal('"+username+"','"+data[i].userName+"') >chat</button>"+"<div id="+data[i].userName+" style=display:none></div>";
+	 	online.innerHTML += "<p>" +  data[i].userName + "  is online </p>"+"<button id=submit onclick=Gopersonal('"+username+"','"+data[i].userName+"') >chat</button>"+"<div id="+data[i].userName+" value=0 ></div>";
 		else
 		online.innerHTML += "<p>" + data[i].userName + "  is online</p> ";
 	}
@@ -149,16 +149,9 @@ socket.on("audio" , function(){
 
 socket.on("notify" , function(data){
 	alert("you have a new message from "+data.handle);
+	
 	document.getElementById("audio").play();
 });
-socket.on("mssg_emmited" , function(data)
-{
-		 document.getElementById(data.name).style.display = "block";
-	//   document.getElementById(data.name).form.style.display = "block";
-	document.getElementById(data.name).innerHTML += "new message";
-//  alert("eesrx");
-});
-// FOR TYPING
 
 message.addEventListener('keypress' , function(){
 
