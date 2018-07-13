@@ -1,12 +1,9 @@
 var express = require('express');
 var socket  = require('socket.io');
 var bodyParser = require('body-parser');
-const Entry  = require('./mongoose/ninja');
-const mongoose = require('mongoose');
 const UserRouter = require('./Users/router');
 const db = require("./Databse/chat_db");
 var app = express();
-var path = require('path'); 
 var cors = require("cors");
 var controllerDelete = require("./Users/controllerDelete")
 app.use(cors());
@@ -24,7 +21,7 @@ db.connect(function(err){
 	}
 });
 var io = socket(server);
-app.use(express.static(path.join(__dirname,'akash')));
+app.use(express.static(path.join(__dirname,'public')));
 console.log(path.join(__dirname,'akash'));
 
 app.use( "/frontpage" , express.static('akash'));

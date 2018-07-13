@@ -1,1 +1,0 @@
-exports.filePath = "/akas/experiment/new/New folder/untitled9";
