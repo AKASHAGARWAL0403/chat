@@ -3,6 +3,7 @@ var socket  = require('socket.io');
 var bodyParser = require('body-parser');
 const UserRouter = require('./Users/router');
 const db = require("./Databse/chat_db");
+const path = require('path');
 var app = express();
 var cors = require("cors");
 var controllerDelete = require("./Users/controllerDelete")
@@ -24,7 +25,7 @@ var io = socket(server);
 app.use(express.static(path.join(__dirname,'public')));
 console.log(path.join(__dirname,'akash'));
 
-app.use( "/frontpage" , express.static('akash'));
+app.use( "/frontpage" , express.static('public'));
 app.use("/userDetails" , UserRouter);
 
 var client_socket = [];

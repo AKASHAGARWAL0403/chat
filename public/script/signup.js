@@ -13,7 +13,8 @@ $('#form').submit(function(e){
         },
         success: function(data){
             if(data.success){
-			    sessionStorage.setItem("userId" , data.result.result[0].id);
+                sessionStorage.setItem("userId" , data.result.result[0].id);
+                sessionStorage.setItem("username" , username);
 				window.location.href = "mainpage.html"
             } else{
 					var message = data.message;

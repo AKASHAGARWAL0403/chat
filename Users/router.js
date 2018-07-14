@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
-var path = require("./../paths");
 var bodyParser = require('body-parser');
 var controllersLogin = require("./controllersLogin");
 var controllersLogged = require('./controllerLogged');
