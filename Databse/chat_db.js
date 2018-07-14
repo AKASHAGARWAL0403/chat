@@ -11,7 +11,7 @@ exports.connect = function(callback){
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'chatbox'
+        database: 'mydb'
     });
     state.pool = pool;
     callback();
