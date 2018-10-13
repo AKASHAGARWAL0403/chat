@@ -90,7 +90,18 @@ io.on('connection' , function(socket)
 	});
 
 	socket.on("typing" , function(data){
-		socket.broadcast.emit("typing" , data);
+		if(data.group)
+			socket.broadcast.emit("typing" , data.name);
+		else{
+			for(i=0;i<client_socket.length ; i++){
+				if(client_socket[i].username === data.to){
+					targetSocket = client_socket[i];
+					break;
+				}
+			}
+			if(i != client_socket.length){
+				targetSocket.emit("typing" , data.name)
+			}
+		}
 	});
-
 });

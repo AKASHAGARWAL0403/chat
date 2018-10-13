@@ -15,7 +15,14 @@ router.post("/login" , bodyParser.urlencoded({ extended: false }), function(req,
             res.send(result);
         }
     });
-})
+});
+
+router.post("/searchUser" , bodyParser.urlencoded({ extended: false}) , function(req,res){
+    var requestBody = req.body;
+    controllersLogin.searchUser(requestBody , function(err,result){
+        res.send(result);
+    });
+});
 
 router.post("/loggedIn" , bodyParser.urlencoded({ extended: false }), function(req,res){
     var requestBody = req.body;

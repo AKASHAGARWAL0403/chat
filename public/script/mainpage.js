@@ -14,7 +14,33 @@ var chat_hide = document.getElementById('chat_hide');
 var chat_form = document.getElementById('chat_form');
 var chat_room = document.getElementById('chat-room');
 
-console.log(chat_room.scrollHeight);
+var searchUser = function(name){
+	if(name){
+		$.ajax({
+			type : 'POST',
+			url : "http://127.0.0.1:5000/userDetails/searchUser",
+			data : {
+				name : name
+			} , 
+			success : function(data){
+				if(data.success){
+
+				} else {
+
+				}
+			}
+		});
+	}
+}
+
+$("#searchUser").on("keyup", function(e){
+	if(e.keyCode === 13){
+
+	} else {
+
+	}
+})
+
 var getOnline = function(data){
 	online.innerHTML = "";
 	for(var i=0;i< data.length  ; i++)
@@ -105,7 +131,7 @@ socket.on('connect', function(){
 socket.on('disco' , function(){
 	console.log("entered");
 	apiCalls();
-})
+});
 var user_arr = [];
 
 
@@ -156,8 +182,7 @@ socket.on("notify" , function(data){
 });
 
 message.addEventListener('keypress' , function(){
-
-	socket.emit("typing" , handle.value);
+	socket.emit("typing" , { name : handle.value , group: true});
 });
 
 socket.on("typing" , function(data){

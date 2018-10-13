@@ -25,6 +25,10 @@ html{
      margin: 30px;
 
    }
+   .imageMessage { 
+     width: 500px;
+     height : 500px
+   }
    #message {
      width: 75%;
      height: 50px;

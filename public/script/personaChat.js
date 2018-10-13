@@ -13,6 +13,37 @@ var feedback = document.getElementById("feedback");
 var chat_hide = document.getElementById('chat_hide');
 var chat_form = document.getElementById('chat_form');
 var chat_room = document.getElementById('chat-room');
+var files = document.getElementById("fileButton");
+
+files.addEventListener('change', function(e){
+	var file = e.target.files[0];
+	console.log(file);
+	message.value = 'images/'+file.name;
+	var storageRef = firebase.storage().ref('images/'+file.name);
+	console.log(storageRef.put(file));
+});
+var addImageMessage = function(link , classNames){
+	var starsRef = firebase.storage().ref(link);
+			starsRef.getDownloadURL().then(function(url) {
+				console.log(url);
+				output.innerHTML += "<p class="+classNames+"><strong>"+data.handle + ":</strong><img src="+url+" /> </p>";
+			   }).catch(function(error) {
+				 switch (error.code) {
+				   case 'storage/object_not_found':
+					 // File doesn't exist
+					 break;
+				   case 'storage/unauthorized':
+					 // User doesn't have permission to access the object
+					 break;
+				   case 'storage/canceled':
+					 // User canceled the upload
+					 break;
+				   case 'storage/unknown':
+					 // Unknown error occurred, inspect the server response
+					 break;
+				 }
+			   });
+}
 var apiCalls = function(){
 	$.ajax({
 		type: 'POST',
@@ -51,13 +82,61 @@ $('#button').on('click',function(){
 
 var socket  = io.connect("http://localhost:5000");
 
-var displayMessage = function(data){
+var  displayMessage =async  function(data){
 	output.innerHTML= "";
+	console.log(data);
 	for(var i=0;i<data.length ;i++){
-		if(data[i].handle === username)
-			output.innerHTML += "<p class=mess1><strong>"+data[i].handle + ":</strong>  " +data[i].message+"</p>";
-		else
-			output.innerHTML += "<p class=mess2><strong>"+data[i].handle + ":</strong>  " +data[i].message+"</p>";
+		if(data[i].handle === username){
+			if(data[i].message.substr(0,7)=== 'images/'){
+				var starsRef = firebase.storage().ref('images');
+				await starsRef.child(data[i].message.substr(7)).getDownloadURL().then(function(url) {
+					console.log(url);
+					output.innerHTML += "<p class=mess1><strong>"+data[i].handle + ":</strong><img class=imageMessage src="+url+" /> </p>";
+				   }).catch(function(error) {
+					 switch (error.code) {
+					   case 'storage/object_not_found':
+						 // File doesn't exist
+						 break;
+					   case 'storage/unauthorized':
+						 // User doesn't have permission to access the object
+						 break;
+					   case 'storage/canceled':
+						 // User canceled the upload
+						 break;
+					   case 'storage/unknown':
+						 // Unknown error occurred, inspect the server response
+						 break;
+					 }
+				   });
+			} else{
+				output.innerHTML += "<p class=mess1><strong>"+data[i].handle + ":</strong>  " +data[i].message+"</p>";
+			}
+		} else{
+			if(data[i].message.substr(0,7)=== 'images/'){
+				var starsRef = firebase.storage().ref('images');
+				await starsRef.child(data[i].message.substr(7)).getDownloadURL().then(function(url) {
+				console.log(url);
+				output.innerHTML += "<p class=mess2><strong>"+data[i].handle + ":</strong><img class=imageMessage src="+url+" /> </p>";
+			   }).catch(function(error) {
+				 switch (error.code) {
+				   case 'storage/object_not_found':
+					 // File doesn't exist
+					 break;
+				   case 'storage/unauthorized':
+					 // User doesn't have permission to access the object
+					 break;
+				   case 'storage/canceled':
+					 // User canceled the upload
+					 break;
+				   case 'storage/unknown':
+					 // Unknown error occurred, inspect the server response
+					 break;
+				 }
+			   });
+			} else{
+				output.innerHTML += "<p class=mess2><strong>"+data[i].handle + ":</strong>  " +data[i].message+"</p>";
+			}
+		}
 	}
 	chat_room.scrollTop = chat_room.scrollHeight;
 }
@@ -176,9 +255,60 @@ chat_form.addEventListener('submit', function(e){
 socket.on("personalChat" , function(data){
 	console.log(data);
 	if(data.handle === username)
-		output.innerHTML += "<p class=mess1><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
-	else
-		output.innerHTML += "<p class=mess2><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
+	{
+		if(data.message.substr(0,7)=== 'images/'){
+			var starsRef = firebase.storage().ref('images');
+			starsRef.child(data.message.substr(7)).getDownloadURL().then(function(url) {
+				console.log(url);
+				console.log("SDFgdfxdxz");
+				output.innerHTML += "<p class=mess1><strong>"+data.handle + ":</strong><img class=imageMessage src="+url+" /> </p>";
+			   }).catch(function(error) {
+				 switch (error.code) {
+				   case 'storage/object_not_found':
+					 // File doesn't exist
+					 break;
+				   case 'storage/unauthorized':
+					 // User doesn't have permission to access the object
+					 break;
+				   case 'storage/canceled':
+					 // User canceled the upload
+					 break;
+				   case 'storage/unknown':
+					 // Unknown error occurred, inspect the server response
+					 break;
+				 }
+			   });
+		} else{
+			output.innerHTML += "<p class=mess1><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
+		}
+	} 
+	else{
+		if(data.message.substr(0,7)=== 'images/'){
+			var starsRef = firebase.storage().ref('images');
+			starsRef.child(data.message.substr(7)).getDownloadURL().then(function(url) {
+				console.log(url);
+				console.log("Sdgfgzdfsds");
+				output.innerHTML += "<p class=mess2><strong>"+data.handle + ":</strong><img  class=imageMessage src="+url+" /> </p>";
+			   }).catch(function(error) {
+				 switch (error.code) {
+				   case 'storage/object_not_found':
+					 // File doesn't exist
+					 break;
+				   case 'storage/unauthorized':
+					 // User doesn't have permission to access the object
+					 break;
+				   case 'storage/canceled':
+					 // User canceled the upload
+					 break;
+				   case 'storage/unknown':
+					 // Unknown error occurred, inspect the server response
+					 break;
+				 }
+			   });
+		} else{
+			output.innerHTML += "<p class=mess2><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
+		}
+	}
 	chat_room.scrollTop = chat_room.scrollHeight;
 });
 socket.on("notify" , function(data){
@@ -186,10 +316,10 @@ socket.on("notify" , function(data){
 	document.getElementById("audio").play();
 });
 message.addEventListener('keypress' , function(){
-	socket.emit("typing" , handle.value);
+	socket.emit("typing" , {name : handle.value , to : user2 , group : false});
 });
 
-// socket.on("typing" , function(data){
-	//feedback.innerHTML = data + " : is typing";
-// });
+socket.on("typing" , function(data){
+	//output.innerHTML += data + " : is typing";
+});
 }
