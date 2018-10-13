@@ -6,7 +6,7 @@ $('#form').submit(function(e){
     console.log(password);
     $.ajax({
         type: 'POST',
-        url: "http://159.65.146.174:5000/userDetails/signup",
+        url: "http://159.65.146.174:5001/userDetails/signup",
         data: {
             username : username,
             password : password

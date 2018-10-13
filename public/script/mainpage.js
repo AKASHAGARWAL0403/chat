@@ -18,7 +18,7 @@ var searchUser = function(name){
 	if(name){
 		$.ajax({
 			type : 'POST',
-			url : "http://159.65.146.174:5000/userDetails/searchUser",
+			url : "http://159.65.146.174:5001/userDetails/searchUser",
 			data : {
 				name : name
 			} , 
