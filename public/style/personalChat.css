@@ -40,13 +40,7 @@ html{
    }
    #handle
    {
-     width: 75%;
-     height: 50px;
-     border-radius: 30px;
-     padding: 15px;
-     font-size: 25px;
-
-     margin-bottom: 15px;
+      display: none;
 
    }
    .mess1
@@ -81,4 +75,25 @@ html{
  }
 #button:hover {
  cursor: pointer
+}
+
+.input-flex
+{
+  display: flex;
+}
+
+#fileButton
+{
+  position: relative;
+  left: 3%;
+  top: 12px;
+}
+
+#send
+{
+  width: 75%;
+  height: 28px;
+  margin: 12px 0 0 5px;
+  position: relative;
+  bottom: 20px;
 }

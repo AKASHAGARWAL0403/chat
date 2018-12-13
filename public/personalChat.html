@@ -30,8 +30,10 @@
 			</div>
 		
 		<form id="chat_form" >
-			<input id="message" type="text" placeholder="message"  /><br>
-			<input type="file" id="fileButton" />
+			<div class="input-flex">
+				<input id="message" type="text" placeholder="message"  /><br>
+				<input type="file" id="fileButton" />
+			</div>
 			<input id="handle" type="text" placeholder="handle" disabled /></br>
 			<input id="send" type="submit">
 		</form>
@@ -57,5 +59,6 @@
   };
   firebase.initializeApp(config);
 </script>
+<script src="script/links.js"></script>
 <script src="script/personaChat.js"></script>
 </html>

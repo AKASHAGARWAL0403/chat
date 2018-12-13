@@ -64,6 +64,7 @@ router.post("/getUserData" , bodyParser.urlencoded({ extended: false }), functio
 
 router.post("/signup" ,bodyParser.urlencoded({ extended: false }), function(req,res){
     var requestBody = req.body;
+    console.log("AKAKAKKAA");
     controllersLogin.create(requestBody , function(err,result){
         if(err){
             console.log(err);

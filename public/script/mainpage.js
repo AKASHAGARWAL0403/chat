@@ -1,3 +1,4 @@
+
 if(sessionStorage.getItem("userId") === null || sessionStorage.getItem("username") === null)
 {
 	window.location.href = "/";
@@ -18,7 +19,7 @@ var searchUser = function(name){
 	if(name){
 		$.ajax({
 			type : 'POST',
-			url : "http://159.65.146.174:5001/userDetails/searchUser",
+			url : links.link+"/userDetails/searchUser",
 			data : {
 				name : name
 			} , 
@@ -62,7 +63,7 @@ var getMessages = function(data){
 var apiCalls = function(){
 	$.ajax({
 		type: 'POST',
-		url: "http://127.0.0.1:5000/userDetails/loggedIn",
+		url: links.link+"/userDetails/loggedIn",
 		data: {
 			socket_id : socket.id,
 			username : username
@@ -71,13 +72,13 @@ var apiCalls = function(){
 			if(data.success){
 				$.ajax({
 				   type:'GET',
-				   url: "http://127.0.0.1:5000/userDetails/getUser",
+				   url: links.link+"/userDetails/getUser",
 				   success: function(data){
 						if(data.success){
 							getOnline(data.result);
 							$.ajax({
 								type: 'GET',
-								url: "http://127.0.0.1:5000/userDetails/getGroupMessages",
+								url: links.link+"/userDetails/getGroupMessages",
 								success: function(data){
 									if(data.success){
 										getMessages(data.result);
@@ -105,7 +106,7 @@ var Gopersonal  = function(user1 , user2){
 	console.log(user2);
 	$.ajax({
 		type:'POST',
-		url:"http://127.0.0.1:5000/userDetails/Gopersonal",
+		url:links.link+"/userDetails/Gopersonal",
 		data: {
 			user1: user1,
 			user2: user2
@@ -119,7 +120,7 @@ var Gopersonal  = function(user1 , user2){
 		}
 	})
 };
-var socket  = io.connect("http://localhost:5000");
+var socket  = io.connect(links.link);
 
 socket.on('connect', function(){
 	sessionStorage.setItem("socket", socket.id);
@@ -141,7 +142,7 @@ chat_form.addEventListener('submit', function(e){
 	console.log("logged into button click");
 	$.ajax({
 		type: 'POST',
-		url: "http://127.0.0.1:5000/userDetails/storeMessage",
+		url: links.link+"/userDetails/storeMessage",
 		data: {
 			message : message.value,
 			handle : handle.value

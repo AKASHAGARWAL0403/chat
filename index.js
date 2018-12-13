@@ -16,7 +16,7 @@ db.connect(function(err){
 		console.log("unable to connect to database");
 	} else {
 		console.log("connected to database");
-		server  = app.listen(5001, function () {
+		server  = app.listen(5000, function () {
 			console.log("listening to port no 5000");
 		});
 	}

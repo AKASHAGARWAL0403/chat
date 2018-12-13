@@ -1,3 +1,4 @@
+
 if(sessionStorage.getItem("userId") === null || sessionStorage.getItem("username") === null || sessionStorage.getItem("user2") === null)
 {
 	window.location.href = "/";
@@ -47,7 +48,7 @@ var addImageMessage = function(link , classNames){
 var apiCalls = function(){
 	$.ajax({
 		type: 'POST',
-		url: "http://127.0.0.1:5000/userDetails/loggedIn",
+		url: links.link+"/userDetails/loggedIn",
 		data: {
 			socket_id : socket.id,
 			username : username
@@ -66,7 +67,7 @@ var apiCalls = function(){
 $('#button').on('click',function(){
 	$.ajax({
 		type: 'POST',
-		url: "http://127.0.0.1:5000/userDetails/removePersonalChat",
+		url: links.link+"/userDetails/removePersonalChat",
 		data: {
 			username : username
 		},
@@ -80,7 +81,7 @@ $('#button').on('click',function(){
 	});
 });
 
-var socket  = io.connect("http://localhost:5000");
+var socket  = io.connect(links.link);
 
 var  displayMessage =async  function(data){
 	output.innerHTML= "";
@@ -144,7 +145,7 @@ var  displayMessage =async  function(data){
 var restoreMessage = function(){
 	$.ajax({
 		type :'POST',
-		url: "http://127.0.0.1:5000/userDetails/restoreMessage",
+		url: links.link+"/userDetails/restoreMessage",
 		data: {
 			tableName : sessionStorage.getItem("table")
 		},
@@ -161,7 +162,7 @@ var restoreMessage = function(){
 var checkTable = function(user1,user2){
 	$.ajax({
 		type: 'POST',
-		url: "http://127.0.0.1:5000/userDetails/createTable",
+		url: links.link+"/userDetails/createTable",
 		data: {
 			user1: user1,
 			user2: user2
@@ -182,7 +183,7 @@ var storeMessage = function(message , data){
 	var tableName = sessionStorage.getItem("table");
 	$.ajax({
 		type : 'POST',
-		url :  "http://127.0.0.1:5000/userDetails/storePrivateMessage",
+		url :  links.link+"/userDetails/storePrivateMessage",
 		data : {
 			tableName : tableName , 
 			handle : username , 
@@ -239,7 +240,7 @@ chat_form.addEventListener('submit', function(e){
 	console.log("logged into button click private");
 	$.ajax({
 		type: 'POST',
-		url: "http://127.0.0.1:5000/userDetails/getUserData",
+		url: links.link+"/userDetails/getUserData",
 		data : {
 			user1 : username,
 			user2 : user2

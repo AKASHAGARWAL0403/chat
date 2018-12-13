@@ -4,9 +4,10 @@ $('#form').submit(function(e){
     var password = $("#password").val();
     console.log(username);
     console.log(password);
+    console.log(links.link+"/userDetails/signup");
     $.ajax({
         type: 'POST',
-        url: "http://159.65.146.174:5001/userDetails/signup",
+        url: links.link+"/userDetails/signup",
         data: {
             username : username,
             password : password
