@@ -46,7 +46,6 @@ var getOnline = function(data){
 	online.innerHTML = "";
 	for(var i=0;i< data.length  ; i++)
 	{
-		console.log(data[i]);
 		if(data[i].userName != username)
 	 	online.innerHTML += "<div class=people><span class=sign></span><h4 class=onlineUser >" +  data[i].userName + "  is online </h4>"+"<button id=submit class='btn btn-default' onclick=Gopersonal('"+username+"','"+data[i].userName+"') >chat</button>"+"<div id="+data[i].userName+" value=0 ></div></div>";
 	}
@@ -75,9 +74,6 @@ var apiCalls = async function(){
 			}
 		});
 
-		console.log(login_result);
-		console.log("AKA");
-
 		get_user = await $.ajax({
 			type:'GET',
 			url: links.link+"/userDetails/getUser"
@@ -101,23 +97,25 @@ var apiCalls = async function(){
 
 var Gopersonal  = function(user1 , user2){
 	sessionStorage.setItem("user2" , user2);
-	console.log(user1);
-	console.log(user2);
-	$.ajax({
-		type:'POST',
-		url:links.link+"/userDetails/Gopersonal",
-		data: {
-			user1: user1,
-			user2: user2
-		},
-		success: function(data){
-			if(data.success){
-				window.location.href = "personalChat.html";
-			}else{
-				console.log(data);
+
+	try{
+		const private_chat = $.ajax({
+			type:'POST',
+			url:links.link+"/userDetails/Gopersonal",
+			data: {
+				user1: user1,
+				user2: user2
 			}
-		}
-	})
+		})
+	
+		if(data.success)
+			window.location.href = "personalChat.html";
+	}catch(error){
+		console.log(error.responseText)
+	}
+	
+	
+	
 };
 var socket  = io.connect(links.link);
 

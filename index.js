@@ -58,12 +58,10 @@ io.on('connection' , function(socket)
 	});
 
 	socket.on("chat" , function(data,callback) {
-		console.log("logged into chat");
 		if(!data.to){
 			io.sockets.emit("chat" ,data);
 			socket.broadcast.emit("audio");
 		} else {
-			console.log(data);
 			var to = data.to;
 			var targetSocket = "";
 			var i;
@@ -75,10 +73,8 @@ io.on('connection' , function(socket)
 			}
 			if(i != client_socket.length){
 				if(data.active){
-					console.log("active");
 					targetSocket.emit("personalChat" , data);
 				} else {
-					console.log("not active");
 					targetSocket.emit("notify" , data);
 				}
 				socket.emit("personalChat" , data);
