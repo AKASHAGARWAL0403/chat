@@ -16,7 +16,7 @@ $('#form').submit(function(e){
             if(data.success){
                 sessionStorage.setItem("userId" , data.result.result[0].id);
                 sessionStorage.setItem("username" , username);
-				window.location.href = "mainpage.html"
+				window.location.href = "/homepage.html"
             } else{
 					var message = data.message;
 					console.log(message);
@@ -29,5 +29,5 @@ $('#form').submit(function(e){
 
 if(sessionStorage.getItem("userId") !== null && sessionStorage.getItem("username") !== null)
 {
-        window.location.href = "/mainpage.html";
+        window.location.href = "/homepage.html";
 }

@@ -207,8 +207,8 @@ $(document).ready(function(){
                     );
                 } else{
                     socket.emit("chat" , {
-                        message : message ,
-                        handle : handle.value,
+                        message : userMessageInput.value ,
+                        handle : username,
                         to : user2,
                         active : false
                     } , function(data){
@@ -218,6 +218,7 @@ $(document).ready(function(){
                 }
             }
         }
+        userMessageInput.value = "";
     })
 
     socket.on('connect', function(){
