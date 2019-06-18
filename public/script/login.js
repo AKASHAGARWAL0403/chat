@@ -15,7 +15,7 @@
                 if(data.success){
                    sessionStorage.setItem("userId" , data.result[0].id);
                    sessionStorage.setItem("username" , data.result[0].username)
-                   window.location.href = "/mainpage.html"
+                   window.location.href = "/homepage.html"
                 }
                     else{
                         var message = data.message;
@@ -29,6 +29,6 @@
     
     if(sessionStorage.getItem("userId") !== null && sessionStorage.getItem("username") !== null)
     {
-        window.location.href = "/mainpage.html";
+        window.location.href = "/homepage.html";
     }
 
