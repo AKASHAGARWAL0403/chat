@@ -39,9 +39,7 @@ search_form.addEventListener('submit',async function(e){
 	e.preventDefault();
 	const search_result = await searchUser(search_query.value)
 	user_list.innerHTML = "";
-	console.log(search_result)
 	if(search_result.error){
-		console.log(search_result.error)
 		user_list.innerHTML += "<div class=error>"+search_result.error+"</div>";
 	}
 	const data = search_result.result.filter(function(res){
@@ -51,6 +49,8 @@ search_form.addEventListener('submit',async function(e){
 	{
 		user_list.innerHTML += "<div class=people><span class=sign></span><h4 class=onlineUser >" +  data[i].username + "  is online </h4>"+"<button id=submit class='btn btn-default' onclick=Gopersonal('"+username+"','"+data[i].username+"') >chat</button>"+"<div id="+data[i].username+" value=0 ></div></div>";
 	}
+	if(data.length == 0)
+		user_list.innerHTML += "<div>No User found</div>"
 })
 
 var getOnline = function(data){

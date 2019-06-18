@@ -48,44 +48,6 @@ exports.loginUser = function(args,callback){
     }
 }
 
-// exports.loginUser = async function(args,callback){
-//     var socket_id = args.socket_id;
-//     var username = args.username;
-//     if(socket_id && username){
-//         try{
-
-//             let query = "SELECT * FROM lognuser WHERE userName ='"+username+"'";
-//             const user_query = await  db.get().query(query)
-//             if(user_query.length){
-
-//                 query = "UPDATE lognuser SET socket_id='"+socket_id+"' WHERE userName='"+username+"'";
-//                 const update_query = await db.get().query(query);
-//                 if(update_query.affectedRows === 1)
-//                     callback(null , {success: true});
-//                 else
-//                     throw new Error("UNKNOWN ERROR");
-//             } else{
-
-//                 query = "INSERT INTO lognuser (socket_id,userName) VALUES ?";
-//                 let value = [
-//                     [socket_id,username]
-//                 ];
-//                 const insert_query  = db.get().query(query , [value]);
-//                 if(insert_query.affectedRows === 1) {
-//                     callback(null, {success: true});
-//                 }
-//             }
-//         } catch(error){
-//             callback(error);
-//         }
-//     }else{
-//         callback("MISSING PARAMS", {success:false});
-//     }
-        
-// }
-
-
-
 exports.getUser = function(callback){
     var query = "SELECT * FROM lognuser";
     db.get().query(query , function(err,res){
