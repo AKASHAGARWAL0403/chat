@@ -28,9 +28,9 @@ router.post("/loggedIn" , bodyParser.urlencoded({ extended: false }), function(r
     var requestBody = req.body;
     controllersLogged.loginUser(requestBody , function(err,result){
         if(err){
-            console.log(err);
+            res.status(400).send(err);
         } else {
-            res.send(result);
+            res.status(200).send(result);
         }
     });
 })

@@ -60,46 +60,45 @@ var getMessages = function(data){
 	chat_room.scrollTop = chat_room.scrollHeight;
 }
 
-var apiCalls = function(){
-	$.ajax({
-		type: 'POST',
-		url: links.link+"/userDetails/loggedIn",
-		data: {
-			socket_id : socket.id,
-			username : username
-		},
-		success: function(data){
-			if(data.success){
-				$.ajax({
-				   type:'GET',
-				   url: links.link+"/userDetails/getUser",
-				   success: function(data){
-						if(data.success){
-							getOnline(data.result);
-							$.ajax({
-								type: 'GET',
-								url: links.link+"/userDetails/getGroupMessages",
-								success: function(data){
-									if(data.success){
-										getMessages(data.result);
-									} else {
-										console.log(data.message);
-									}
-								}
-							});
-						} else {
-							console.log(data);
-						}
-				   }
-			   })
+
+var apiCalls = async function(){
+	
+	let login_result , get_user , group_message;
+	try{
+		
+		login_result = await $.ajax({
+			type: 'POST',
+			url: links.link+"/userDetails/loggedIn",
+			data: {
+				socket_id : socket.id,
+				username : username
 			}
-			else{
-				console.log(data);
-				window.location.href = "/";
-			}
-		}
-	});
+		});
+
+		console.log(login_result);
+		console.log("AKA");
+
+		get_user = await $.ajax({
+			type:'GET',
+			url: links.link+"/userDetails/getUser"
+		});
+
+		getOnline(get_user.result);
+
+		group_message = await $.ajax({
+			type: 'GET',
+			url: links.link+"/userDetails/getGroupMessages"
+		});
+		
+		getMessages(group_message.result);
+
+	} catch(error){
+		console.log(error.responseText);
+	}
 }
+
+
+
 var Gopersonal  = function(user1 , user2){
 	sessionStorage.setItem("user2" , user2);
 	console.log(user1);
@@ -130,7 +129,6 @@ socket.on('connect', function(){
 });
 
 socket.on('disco' , function(){
-	console.log("entered");
 	apiCalls();
 });
 var user_arr = [];
@@ -139,7 +137,6 @@ var user_arr = [];
 
 chat_form.addEventListener('submit', function(e){
 	e.preventDefault();
-	console.log("logged into button click");
 	$.ajax({
 		type: 'POST',
 		url: links.link+"/userDetails/storeMessage",
@@ -166,8 +163,6 @@ chat_form.addEventListener('submit', function(e){
 });
 
 socket.on("chat" , function(data) {
-
-	console.log("logged to chat");
 	feedback.innerHTML = "";
 	output.innerHTML += "<p><strong>" + data.handle + "</strong> : " + data.message + "</p><hr>" ;
 });
@@ -177,8 +172,7 @@ socket.on("audio" , function(){
 });
 
 socket.on("notify" , function(data){
-	alert("you have a new message from "+data.handle);
-	
+	alert("you have a new message from "+data.handle);	
 	document.getElementById("audio").play();
 });
 

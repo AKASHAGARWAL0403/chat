@@ -11,11 +11,8 @@ $('#form').submit(function(e){
             password : password
         },
         success: function(data){
-            console.log("Sdf");
-            console.log(data);
             if(data.success){
-			  
-               sessionStorage.setItem("userId" , data.result[0].id);
+			   sessionStorage.setItem("userId" , data.result[0].id);
                sessionStorage.setItem("username" , data.result[0].username)
 			   window.location.href = "mainpage.html"
             }
