@@ -6,6 +6,7 @@ var controllersLogin = require("./controllersLogin");
 var controllersLogged = require('./controllerLogged');
 var controllersPersonal = require('./controllersPersonal');
 var controllersMessage  = require('./controllersMessage');
+
 router.post("/login" , bodyParser.urlencoded({ extended: false }), function(req,res){
     var requestBody = req.body;
     controllersLogin.findUser(requestBody , function(err,result){
@@ -18,9 +19,11 @@ router.post("/login" , bodyParser.urlencoded({ extended: false }), function(req,
 });
 
 router.post("/searchUser" , bodyParser.urlencoded({ extended: false}) , function(req,res){
-    var requestBody = req.body;
+    var requestBody = req.body || "";
     controllersLogin.searchUser(requestBody , function(err,result){
-        res.send(result);
+        if(err)
+            res.status(400).send(err);
+        res.status(200).send(result);
     });
 });
 

@@ -25,3 +25,9 @@ $('#form').submit(function(e){
             }
     });
 })
+
+
+if(sessionStorage.getItem("userId") !== null && sessionStorage.getItem("username") !== null)
+{
+        window.location.href = "/mainpage.html";
+}

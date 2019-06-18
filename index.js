@@ -21,6 +21,7 @@ db.connect(function(err){
 		});
 	}
 });
+
 var io = socket(server);
 app.use(express.static(path.join(__dirname,'public')));
 console.log(path.join(__dirname,'akash'));
@@ -31,13 +32,12 @@ app.use("/userDetails" , UserRouter);
 var client_socket = [];
 io.on('connection' , function(socket)
 {
-	console.log("socket is connected");
+	
 	client_socket.push(socket);
 	socket.broadcast.emit('disco');
 	
 	socket.on("username" , function(data){
 		socket.username = data.username;
-		console.log(socket.username);
 	});
 
 	socket.on("disconnect" , function(){

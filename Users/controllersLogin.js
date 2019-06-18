@@ -105,16 +105,12 @@ exports.create = function(args, callback){
 }
 
 exports.searchUser = function(args , callback){
-    if(args.name){
-        var query = "SELECT * FROM userdata WHERE username LIKE '%"+args.name+"%'";
-        db.get().query(query , function(err,res){
-            if(err){
-                callback(null , {success : false , message : err.message});
-            } else {
-                callback(null, {success :true , result : res});
-            }
-        });
-    } else {
-       callback(null , {success : false , message : "MISSING PARAMS"});
-    }
+    var query = "SELECT username FROM userdata WHERE username LIKE '%"+args.name+"%'";
+    db.get().query(query , function(err,res){
+        if(err){
+            callback("Some internal error" , {success : false});
+        } else {
+            callback(null, {success :true , result : res});
+        }
+    });
 }

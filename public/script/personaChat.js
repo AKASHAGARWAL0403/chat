@@ -23,6 +23,7 @@ files.addEventListener('change', function(e){
 	var storageRef = firebase.storage().ref('images/'+file.name);
 	console.log(storageRef.put(file));
 });
+
 var addImageMessage = function(link , classNames){
 	var starsRef = firebase.storage().ref(link);
 			starsRef.getDownloadURL().then(function(url) {
@@ -45,6 +46,36 @@ var addImageMessage = function(link , classNames){
 				 }
 			   });
 }
+
+var appendMessgae = async function(data){
+	if(data.handle === username)
+	{
+		if(data.message.substr(0,7)=== 'images/'){
+			var starsRef = firebase.storage().ref('images');
+			await starsRef.child(data.message.substr(7)).getDownloadURL().then(function(url) {
+				output.innerHTML += "<p class=mess1><strong>"+data.handle + ":</strong><img class=imageMessage src="+url+" /> </p>";
+			   }).catch(function(error) {
+				 	console.log(error.code)  
+			   });
+		} else{
+			output.innerHTML += "<p class=mess1><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
+		}
+	} 
+	else{
+		if(data.message.substr(0,7)=== 'images/'){
+			var starsRef = firebase.storage().ref('images');
+			await starsRef.child(data.message.substr(7)).getDownloadURL().then(function(url) {
+				output.innerHTML += "<p class=mess2><strong>"+data.handle + ":</strong><img  class=imageMessage src="+url+" /> </p>";
+			   }).catch(function(error) {
+				 	console.log(error.code)
+			   });
+		} else{
+			output.innerHTML += "<p class=mess2><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
+		}
+	}
+}
+
+
 var apiCalls = function(){
 	$.ajax({
 		type: 'POST',
@@ -64,6 +95,7 @@ var apiCalls = function(){
 		}
 	});
 }
+
 $('#button').on('click',function(){
 	$.ajax({
 		type: 'POST',
@@ -87,57 +119,7 @@ var  displayMessage =async  function(data){
 	output.innerHTML= "";
 	console.log(data);
 	for(var i=0;i<data.length ;i++){
-		if(data[i].handle === username){
-			if(data[i].message.substr(0,7)=== 'images/'){
-				var starsRef = firebase.storage().ref('images');
-				await starsRef.child(data[i].message.substr(7)).getDownloadURL().then(function(url) {
-					console.log(url);
-					output.innerHTML += "<p class=mess1><strong>"+data[i].handle + ":</strong><img class=imageMessage src="+url+" /> </p>";
-				   }).catch(function(error) {
-					 switch (error.code) {
-					   case 'storage/object_not_found':
-						 // File doesn't exist
-						 break;
-					   case 'storage/unauthorized':
-						 // User doesn't have permission to access the object
-						 break;
-					   case 'storage/canceled':
-						 // User canceled the upload
-						 break;
-					   case 'storage/unknown':
-						 // Unknown error occurred, inspect the server response
-						 break;
-					 }
-				   });
-			} else{
-				output.innerHTML += "<p class=mess1><strong>"+data[i].handle + ":</strong>  " +data[i].message+"</p>";
-			}
-		} else{
-			if(data[i].message.substr(0,7)=== 'images/'){
-				var starsRef = firebase.storage().ref('images');
-				await starsRef.child(data[i].message.substr(7)).getDownloadURL().then(function(url) {
-				console.log(url);
-				output.innerHTML += "<p class=mess2><strong>"+data[i].handle + ":</strong><img class=imageMessage src="+url+" /> </p>";
-			   }).catch(function(error) {
-				 switch (error.code) {
-				   case 'storage/object_not_found':
-					 // File doesn't exist
-					 break;
-				   case 'storage/unauthorized':
-					 // User doesn't have permission to access the object
-					 break;
-				   case 'storage/canceled':
-					 // User canceled the upload
-					 break;
-				   case 'storage/unknown':
-					 // Unknown error occurred, inspect the server response
-					 break;
-				 }
-			   });
-			} else{
-				output.innerHTML += "<p class=mess2><strong>"+data[i].handle + ":</strong>  " +data[i].message+"</p>";
-			}
-		}
+		await appendMessgae(data[i]);
 	}
 	chat_room.scrollTop = chat_room.scrollHeight;
 }
@@ -171,7 +153,6 @@ var checkTable = function(user1,user2){
 			if(data.success){
 				sessionStorage.setItem("table" , data.tableName);
 				restoreMessage();
-				console.log(sessionStorage.getItem("table"));
 			} else{
 				window.location.href = "mainpage.html";
 			}
@@ -226,7 +207,6 @@ var storeMessage = function(message , data){
 socket.on('connect', function(){
 	sessionStorage.setItem("socket", socket.id);
 	handle.value = username;
-	console.log(socket.id);
 	apiCalls();
 	socket.emit("username" , {username : username});
 });
@@ -237,7 +217,6 @@ socket.on("audio" , function(){
 
 chat_form.addEventListener('submit', function(e){
 	e.preventDefault();
-	console.log("logged into button click private");
 	$.ajax({
 		type: 'POST',
 		url: links.link+"/userDetails/getUserData",
@@ -246,76 +225,22 @@ chat_form.addEventListener('submit', function(e){
 			user2 : user2
 		},
 		success : function(data){
-			console.log(data);
 			storeMessage(message.value , data);
 			feedback.innerHTML = "";
 			message.value = "";
 		}
 	});
 });
+
 socket.on("personalChat" , function(data){
-	console.log(data);
-	if(data.handle === username)
-	{
-		if(data.message.substr(0,7)=== 'images/'){
-			var starsRef = firebase.storage().ref('images');
-			starsRef.child(data.message.substr(7)).getDownloadURL().then(function(url) {
-				console.log(url);
-				console.log("SDFgdfxdxz");
-				output.innerHTML += "<p class=mess1><strong>"+data.handle + ":</strong><img class=imageMessage src="+url+" /> </p>";
-			   }).catch(function(error) {
-				 switch (error.code) {
-				   case 'storage/object_not_found':
-					 // File doesn't exist
-					 break;
-				   case 'storage/unauthorized':
-					 // User doesn't have permission to access the object
-					 break;
-				   case 'storage/canceled':
-					 // User canceled the upload
-					 break;
-				   case 'storage/unknown':
-					 // Unknown error occurred, inspect the server response
-					 break;
-				 }
-			   });
-		} else{
-			output.innerHTML += "<p class=mess1><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
-		}
-	} 
-	else{
-		if(data.message.substr(0,7)=== 'images/'){
-			var starsRef = firebase.storage().ref('images');
-			starsRef.child(data.message.substr(7)).getDownloadURL().then(function(url) {
-				console.log(url);
-				console.log("Sdgfgzdfsds");
-				output.innerHTML += "<p class=mess2><strong>"+data.handle + ":</strong><img  class=imageMessage src="+url+" /> </p>";
-			   }).catch(function(error) {
-				 switch (error.code) {
-				   case 'storage/object_not_found':
-					 // File doesn't exist
-					 break;
-				   case 'storage/unauthorized':
-					 // User doesn't have permission to access the object
-					 break;
-				   case 'storage/canceled':
-					 // User canceled the upload
-					 break;
-				   case 'storage/unknown':
-					 // Unknown error occurred, inspect the server response
-					 break;
-				 }
-			   });
-		} else{
-			output.innerHTML += "<p class=mess2><strong>"+data.handle + ":</strong>  " +data.message+"</p>";
-		}
-	}
-	chat_room.scrollTop = chat_room.scrollHeight;
+	appendMessgae(data);
 });
+
 socket.on("notify" , function(data){
 	alert("you have a new message from "+data.handle);
 	document.getElementById("audio").play();
 });
+
 message.addEventListener('keypress' , function(){
 	socket.emit("typing" , {name : handle.value , to : user2 , group : false});
 });
@@ -323,4 +248,5 @@ message.addEventListener('keypress' , function(){
 socket.on("typing" , function(data){
 	//output.innerHTML += data + " : is typing";
 });
+
 }
