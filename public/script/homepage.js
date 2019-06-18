@@ -11,6 +11,8 @@ $(document).ready(function(){
     const profile_username = document.getElementById('profile-username')
     const chatMessageDOM = document.getElementById('chat-messages')
     const contactDisplayDiv = document.getElementById('contact-profile-div')
+    const userMessageInput = document.getElementById('user-message')
+    const userMessageButton = document.getElementById('user-message-button')
 
     profile_username.innerHTML = username.toUpperCase()
 
@@ -20,31 +22,52 @@ $(document).ready(function(){
             contact_list.innerHTML += generateContactHtml("online" , element.userName.toLowerCase())
         });
         $('.contact').on('click',contactOnClick)
-        
+        $('.message-input').css('display' , 'block')
         if(data.length != 0)
             contact_list.childNodes[1].click()
         else{
             contactDisplayDiv.childNodes[3].innerHTML = ""
             chatMessageDOM.innerHTML = "";    
+            $('.message-input').css('display' , 'none')
         }
            
+    }
+
+    const appendSingleChatMessage = function(element){
+        chatMessageDOM.innerHTML += generateMessageHtml((element.handle === username?"replies":"sent") , element.message)
     }
 
     const appendChatMessages = function(data){
         chatMessageDOM.innerHTML = "";
         data.forEach(function(element){
-            chatMessageDOM.innerHTML += generateMessageHtml((element.handle === username?"replies":"sent") , element.message)
+            appendSingleChatMessage(element);
         })
     }
 
     const contactOnClick = async function(e){
+        await goPersonal(username , this.id);
         const tableName = await checkTable(username , this.id)
         const messages = await restoreMessage(tableName);
         contactDisplayDiv.childNodes[3].innerHTML = this.id;
         appendChatMessages(messages);
-        sessionStorage.setItem(this.id , tableName);
+        sessionStorage.setItem(this.id , tableName); 
     }
 
+    const goPersonal  = async function(user1 , user2){
+        sessionStorage.setItem("user2" , user2);
+        try{
+            const private_chat = await $.ajax({
+                type:'POST',
+                url:links.link+"/userDetails/Gopersonal",
+                data: {
+                    user1: user1,
+                    user2: user2
+                }
+            })
+        }catch(error){
+            console.log(error.responseText)
+        }	
+    };
 
     const restoreMessage = async function(tableName){
         try{
@@ -137,6 +160,66 @@ $(document).ready(function(){
         return messageHtml
     }
 
+    const getUserData = async function(data){
+        const userResult = await $.ajax({
+            type: 'POST',
+            url: links.link+"/userDetails/getUserData",
+            data : data
+        });
+        return userResult
+    }
+
+    const storeMessage = function(message , user2){
+        const tableName = sessionStorage.getItem(user2);
+        try{
+            const privateMessageQuery = $.ajax({
+                type : 'POST',
+                url :  links.link+"/userDetails/storePrivateMessage",
+                data : {
+                    tableName : tableName , 
+                    handle : username , 
+                    message : message
+                }
+            });
+
+            return privateMessageQuery;
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    userMessageButton.addEventListener('click', async function(e){
+        e.preventDefault();
+        const user2 = contactDisplayDiv.childNodes[3].innerHTML.toLowerCase()
+        const userData = await getUserData({user1 : username , user2 : user2})
+        const storeMessageQuery = await storeMessage(userMessageInput.value , user2);
+        if(storeMessageQuery.success) {
+            if(userData.success){
+                if(userData.sameUser){
+                    socket.emit("chat" , {
+                        message : userMessageInput.value ,
+                        handle : username,
+                        to : user2,
+                        active : true
+                    } , function(data){
+                            alert(data);
+                        }
+                    );
+                } else{
+                    socket.emit("chat" , {
+                        message : message ,
+                        handle : handle.value,
+                        to : user2,
+                        active : false
+                    } , function(data){
+                            alert(data);
+                        }
+                    );
+                }
+            }
+        }
+    })
+
     socket.on('connect', function(){
         sessionStorage.setItem("socket", socket.id);
         apiCalls();
@@ -145,6 +228,15 @@ $(document).ready(function(){
 
     socket.on('disco' , function(){
         apiCalls();
+    });
+
+    socket.on("personalChat" , function(data){
+        appendSingleChatMessage(data);
+    });
+    
+    socket.on("notify" , function(data){
+        alert("you have a new message from "+data.handle);
+        document.getElementById("audio").play();
     });
 
 })
