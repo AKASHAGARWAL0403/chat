@@ -20,6 +20,14 @@ $(document).ready(function(){
             contact_list.innerHTML += generateContactHtml("online" , element.userName.toLowerCase())
         });
         $('.contact').on('click',contactOnClick)
+        
+        if(data.length != 0)
+            contact_list.childNodes[1].click()
+        else{
+            contactDisplayDiv.childNodes[3].innerHTML = ""
+            chatMessageDOM.innerHTML = "";    
+        }
+           
     }
 
     const appendChatMessages = function(data){
@@ -34,6 +42,7 @@ $(document).ready(function(){
         const messages = await restoreMessage(tableName);
         contactDisplayDiv.childNodes[3].innerHTML = this.id;
         appendChatMessages(messages);
+        sessionStorage.setItem(this.id , tableName);
     }
 
 
@@ -130,6 +139,11 @@ $(document).ready(function(){
 
     socket.on('connect', function(){
         sessionStorage.setItem("socket", socket.id);
+        apiCalls();
+        socket.emit("username" , {username : username});
+    });
+
+    socket.on('disco' , function(){
         apiCalls();
     });
 
