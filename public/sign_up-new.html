@@ -25,23 +25,17 @@
 						
 					</div>
 
+                    <div class="wrap-input100 validate-input">
+						<input class="input100" type="file" id="fileButton">
+					</div>
+
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
 							<button class="login100-form-btn" id="submit">
-								Login
+								Signup
 							</button>
 						</div>
-					</div>
-
-					<div class="text-center p-t-115">
-						<span class="txt1">
-							Don’t have an account?
-						</span>
-
-						<a class="txt2" href="sign_up.html">
-							Sign Up
-						</a>
 					</div>
 				</form>
 			</div>
@@ -53,6 +47,19 @@
 	
 </body>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCveamR4uj4aL23xTZdsx5omocDCMfFa2k",
+    authDomain: "fir-login-b26ec.firebaseapp.com",
+    databaseURL: "https://fir-login-b26ec.firebaseio.com",
+    projectId: "fir-login-b26ec",
+    storageBucket: "fir-login-b26ec.appspot.com",
+    messagingSenderId: "593791850047"
+  };
+  firebase.initializeApp(config);
+</script>
 <script src="script/links.js"></script>
-<script src="script/login.js"></script>
+<script src="script/signup.js"></script>
 </html>

@@ -14,11 +14,26 @@
 		<form id="form" >
 			<div class="inputone"> <input type="text" name="name" id="name" required placeholder="enter your student_id" class="inpu" ></div><br>
 			<div class="inputone">  <input type="password" name="password" id="password" required placeholder="enter your password" class="inpu"></div><br>
+			<input type="file" id="fileButton" />
 			<input type="submit" name="submit" id="submit">
 		</form>
 	</div>
 </div>
 </body>
+
+<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCveamR4uj4aL23xTZdsx5omocDCMfFa2k",
+    authDomain: "fir-login-b26ec.firebaseapp.com",
+    databaseURL: "https://fir-login-b26ec.firebaseio.com",
+    projectId: "fir-login-b26ec",
+    storageBucket: "fir-login-b26ec.appspot.com",
+    messagingSenderId: "593791850047"
+  };
+  firebase.initializeApp(config);
+</script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script src="script/links.js"></script>
 <script src="script/signup.js"></script>

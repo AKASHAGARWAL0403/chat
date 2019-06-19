@@ -16,11 +16,37 @@ $(document).ready(function(){
 
     profile_username.innerHTML = username.toUpperCase()
 
-    const appendOnlineUsers = function(data){
+
+
+    const getUserImage = async function(userName , selectorId){
+        console.log(userName)
+        const starsRef = firebase.storage().ref('userImages');
+        try{
+            const url = await starsRef.child(userName).getDownloadURL();
+            if(selectorId)
+                $('#'+selectorId).attr('src' , url)
+            return url;
+        }catch(error){
+            console.log(error)  
+        }
+
+    }
+
+    const appendAllUsers = async function(data){
+        for(var i=0;i<data.length;i++)
+        {
+            let element = data[i];
+            const url = await getUserImage(element.userName.toLowerCase())
+            console.log(url)
+            contact_list.innerHTML += generateContactHtml("online" , element.userName.toLowerCase() , url)
+        }
+    }
+
+    const appendOnlineUsers = async function(data){
         contact_list.innerHTML = "";
-        data.forEach(function(element){
-            contact_list.innerHTML += generateContactHtml("online" , element.userName.toLowerCase())
-        });
+        
+        await appendAllUsers(data);
+
         $('.contact').on('click',contactOnClick)
         $('.message-input').css('display' , 'block')
         if(data.length != 0)
@@ -49,6 +75,7 @@ $(document).ready(function(){
         const tableName = await checkTable(username , this.id)
         const messages = await restoreMessage(tableName);
         contactDisplayDiv.childNodes[3].innerHTML = this.id;
+        getUserImage(this.id , 'chat-user-img');
         appendChatMessages(messages);
         sessionStorage.setItem(this.id , tableName); 
     }
@@ -104,8 +131,9 @@ $(document).ready(function(){
 	    try{
             
             await logInUser();
+            await getUserImage(username , 'profile-img');
             await getOnlineUser();
-    
+            
         } catch(error){
             console.log(error.responseText);
         }
@@ -136,12 +164,12 @@ $(document).ready(function(){
         appendOnlineUsers(get_user);
     }
 
-    const generateContactHtml = function(status , username){
+    const generateContactHtml = function(status , username , imageUrl){
         let contact_html = "\
             <li class='contact' id='"+username+"'>\
                 <div class='wrap'>\
                 <span class='contact-status "+status+"'></span>\
-                <img src='http://emilcarlsson.se/assets/louislitt.png' alt='' />\
+                <img src='"+imageUrl+"' alt='' />\
                 <div class='meta'>\
                     <p class='name'>"+ username.toUpperCase() + "</p>\
                 </div>\
