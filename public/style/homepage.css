@@ -21,7 +21,7 @@ body {
     max-width: 1000px;
     height: 92vh;
     min-height: 300px;
-    max-height: 1100px;
+    max-height: 750px;
     background: #E6EAEA;
   }
   @media screen and (max-width: 360px) {
