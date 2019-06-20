@@ -329,6 +329,7 @@ iframe {
 }
 
 .login100-form-btn {
+  background: transparent;
   font-family: Poppins-Medium;
   font-size: 15px;
   color: #fff;

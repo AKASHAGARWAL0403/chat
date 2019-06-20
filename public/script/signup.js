@@ -29,12 +29,12 @@ $('#submit').on('click' , async function(e){
             const ref = await storageRef.put(file);
             window.location.href = "/homepage.html"
         } else{
-                var message = data.message;
-                console.log(message);
+                var message = signUp.message;
                 $('#errorValue').html(message);
         }
     }catch(error){
         console.log(error)
+        $('#errorValue').html(error);
     }       
 })
 

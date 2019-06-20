@@ -14,7 +14,7 @@
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-						<input class="input100" type="text" name="email" id="name" placeholder="Enter your username">
+						<input class="input100" type="text" name="email" required id="name" placeholder="Enter your username">
 						
 					</div>
 
@@ -22,20 +22,18 @@
 						<span class="btn-show-pass">
 							<i class="zmdi zmdi-eye"></i>
 						</span>
-						<input class="input100" type="password" name="pass" id="password" placeholder="enter your password">
+						<input class="input100" type="password" name="pass" id="password" required placeholder="enter your password">
 						
 					</div>
 
                     <div class="wrap-input100 validate-input">
-						<input class="input100" type="file" id="fileButton">
+						<input class="input100" type="file" required id="fileButton">
 					</div>
 
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn" id="submit">
-								Signup
-							</button>
+							<input class="login100-form-btn"  type="submit" value="Sign up">
 						</div>
 					</div>
 				</form>
