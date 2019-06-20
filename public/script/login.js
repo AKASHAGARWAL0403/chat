@@ -4,8 +4,10 @@
         e.preventDefault();
         var username = $('#name').val();
         var password = $("#password").val();
-        console.log(username)
-        console.log(password)
+        if(/[^a-z0-9]/gi.test(username)){
+            $('#errorValue').html("Username cant contain special character");
+            return;
+        }
         $.ajax({
             type: 'POST',
             url: links.link+"/userDetails/login",
@@ -17,7 +19,6 @@
                 if(data.success){
                    sessionStorage.setItem("userId" , data.result[0].id);
                    sessionStorage.setItem("username" , data.result[0].username)
-                   console.log("ALAS")
                    window.location.href = "/homepage.html"
                 }
                     else{

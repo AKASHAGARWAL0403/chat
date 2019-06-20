@@ -4,9 +4,15 @@ $('#submit').on('click' , async function(e){
     e.preventDefault();
     const file = $('input[type="file"]')[0].files[0];
    // console.log(file)
-    const username = $('#name').val().toLowerCase();
+    const username = $('#name').val();
     const password = $("#password").val();
+    if(/[^a-z0-9]/gi.test(username)){
+        $('#errorValue').html("Username cant contain special character");
+        return;
+    }
     try{
+        $('#loader').css('display' , 'block');
+        //console.log($('#loader'))
         const signUp = await $.ajax({
             type: 'POST',
             url: links.link+"/userDetails/signup",
@@ -15,11 +21,10 @@ $('#submit').on('click' , async function(e){
                 password : password
             }
         });
-      //  console.log(signUp)
+        $('#loader').css('display' , 'none');
         if(signUp.success){
             sessionStorage.setItem("userId" , signUp.result.result[0].id);
             sessionStorage.setItem("username" , username);
-            console.log("alas0")
             const storageRef = firebase.storage().ref('userImages/'+ username);
             const ref = await storageRef.put(file);
             window.location.href = "/homepage.html"

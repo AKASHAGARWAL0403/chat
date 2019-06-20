@@ -6,7 +6,7 @@ $(document).ready(function(){
     }
 
     const socket  = io.connect(links.link);
-    const username = sessionStorage.getItem("username").toLowerCase()
+    let username = sessionStorage.getItem("username");
     const contact_list = document.getElementById('contact-list')
     const profile_username = document.getElementById('profile-username')
     const chatMessageDOM = document.getElementById('chat-messages')
@@ -14,7 +14,12 @@ $(document).ready(function(){
     const userMessageInput = document.getElementById('user-message')
     const userMessageButton = document.getElementById('user-message-button')
 
-    profile_username.innerHTML = username.toUpperCase()
+    if(username.includes('@'))
+    {
+        username = username.substr(0 , username.indexOf('@'));
+    }
+    
+    profile_username.innerHTML = username
 
 
 
@@ -36,9 +41,9 @@ $(document).ready(function(){
         for(var i=0;i<data.length;i++)
         {
             let element = data[i];
-            const url = await getUserImage(element.userName.toLowerCase())
+            const url = await getUserImage(element.userName)
             console.log(url)
-            contact_list.innerHTML += generateContactHtml("online" , element.userName.toLowerCase() , url)
+            contact_list.innerHTML += generateContactHtml("online" , element.userName , url)
         }
     }
 
@@ -71,9 +76,13 @@ $(document).ready(function(){
     }
 
     const contactOnClick = async function(e){
+        console.log("enterog " , this.id)
         await goPersonal(username , this.id);
+        console.log("enterog ")
         const tableName = await checkTable(username , this.id)
+        console.log("enterog " , tableName)
         const messages = await restoreMessage(tableName);
+        console.log("id is")
         contactDisplayDiv.childNodes[3].innerHTML = this.id;
         getUserImage(this.id , 'chat-user-img');
         appendChatMessages(messages);
@@ -121,6 +130,7 @@ $(document).ready(function(){
                     user2: user2
                 }
             });
+            console.log(table_query)
             return table_query.tableName
         }catch(error){
             console.log(error);
@@ -158,7 +168,7 @@ $(document).ready(function(){
         });
         
         get_user = get_user.result.filter(function(res){
-            return res.userName.toLowerCase() != username.toLowerCase()
+            return res.userName != username
         })
         
         appendOnlineUsers(get_user);
@@ -171,7 +181,7 @@ $(document).ready(function(){
                 <span class='contact-status "+status+"'></span>\
                 <img src='"+imageUrl+"' alt='' />\
                 <div class='meta'>\
-                    <p class='name'>"+ username.toUpperCase() + "</p>\
+                    <p class='name'>"+ username + "</p>\
                 </div>\
             </div>\
         </li>" 
@@ -218,7 +228,7 @@ $(document).ready(function(){
 
     userMessageButton.addEventListener('click', async function(e){
         e.preventDefault();
-        const user2 = contactDisplayDiv.childNodes[3].innerHTML.toLowerCase()
+        const user2 = contactDisplayDiv.childNodes[3].innerHTML
         const userData = await getUserData({user1 : username , user2 : user2})
         const storeMessageQuery = await storeMessage(userMessageInput.value , user2);
         if(storeMessageQuery.success) {
