@@ -1,5 +1,13 @@
 
 
+    $('#name').on('keyup',function(e){
+        $('#errorValue').html("");
+    })
+
+    $('#password').on('keyup',function(e){
+        $('#errorValue').html("");
+    })
+    
     $('#form').on('submit',function(e){
         e.preventDefault();
         var username = $('#name').val();

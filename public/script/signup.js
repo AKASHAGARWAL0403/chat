@@ -1,4 +1,16 @@
+
+$('#name').on('keyup',function(e){
+    $('#errorValue').html("");
+})
+
+$('#password').on('keyup',function(e){
+    $('#errorValue').html("");
+})
+
 var files = document.getElementById("fileButton");
+$('#fileButton').on('change',function(e){
+    $('#errorValue').html("")
+})
 
 $('#form').on('submit' , async function(e){
     e.preventDefault();
