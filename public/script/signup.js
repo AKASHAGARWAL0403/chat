@@ -1,6 +1,6 @@
 var files = document.getElementById("fileButton");
 
-$('#submit').on('click' , async function(e){
+$('#form').on('submit' , async function(e){
     e.preventDefault();
     const file = $('input[type="file"]')[0].files[0];
    // console.log(file)

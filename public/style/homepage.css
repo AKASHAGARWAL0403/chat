@@ -351,9 +351,10 @@ body {
   }
   #frame #sidepanel #contacts ul li.contact {
     position: relative;
-    padding: 10px 0 15px 0;
+    padding: 10px 10px 15px 10px;
     font-size: 0.9em;
     cursor: pointer;
+    height: 45px;
   }
   @media screen and (max-width: 735px) {
     #frame #sidepanel #contacts ul li.contact {
