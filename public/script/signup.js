@@ -33,15 +33,17 @@ $('#form').on('submit' , async function(e){
                 password : password
             }
         });
-        $('#loader').css('display' , 'none');
+        
         if(signUp.success){
             sessionStorage.setItem("userId" , signUp.result.result[0].id);
             sessionStorage.setItem("username" , username);
             const storageRef = firebase.storage().ref('userImages/'+ username);
             const ref = await storageRef.put(file);
+            $('#loader').css('display' , 'none');
             window.location.href = "/homepage.html"
         } else{
                 var message = signUp.message;
+                $('#loader').css('display' , 'none');
                 $('#errorValue').html(message);
         }
     }catch(error){
